@@ -1,0 +1,28 @@
+{
+    "name": "halestar/dicms-blogger",
+    "description": "A plugin to the halestar/laravel-drop-in-cms that adds blogging capabilities to the CMS.",
+    "type": "plugin",
+    "require": {
+        "halestar/laravel-drop-in-cms": "^0.1.3"
+    },
+    "license": "GPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "halestar\\DiCmsBlogger\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "halestar\\DiCmsBlogger\\Providers\\DiCmsBloggerServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "German Kalinec",
+            "email": "german@kalinec.net"
+        }
+    ],
+    "minimum-stability": "stable"
+}
