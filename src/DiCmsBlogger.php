@@ -63,7 +63,7 @@ class DiCmsBlogger implements DiCmsPlugin
 	{
 		return
             [
-                new DiCmsPluginPage( __('dicms-blog::blogger.blogs'), "/blog"),
+                new DiCmsPluginPage( __('dicms-blog::blogger.blogs'), "blog"),
             ];
 
 	}
