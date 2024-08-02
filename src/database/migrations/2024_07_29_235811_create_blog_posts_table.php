@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('subtitle')->nullable();
             $table->string('slug');
             $table->string('posted_by');
-            $table->text('body');
+            $table->text('body')->nullable();
             $table->boolean('published')->default(false);
             $table->timestamps();
         });
