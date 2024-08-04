@@ -89,7 +89,6 @@ class BlogPostController
         $settings::set('blogs.posts_ul', $request->input('posts_ul', ''));
         $settings::set('blogs.posts_li', $request->input('posts_li', ''));
         $settings::set('blogs.posts_link', $request->input('posts_link', ''));
-        $settings::set('blogs.posts_by', $request->input('posts_by', ''));
         $settings::set('blogs.post_article', $request->input('post_article', ''));
         $settings::set('blogs.post_head', $request->input('post_head', ''));
         $settings::set('blogs.post_title', $request->input('post_title', ''));

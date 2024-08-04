@@ -59,18 +59,6 @@
                         <div id="posts_linkHelp" class="form-text">{{ __('dicms-blog::blogger.settings.posts.link.help') }}</div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="posts_by" class="form-label">{{ __('dicms-blog::blogger.settings.posts.by') }}</label>
-                        <input
-                            type="text"
-                            name="posts_by"
-                            id="posts_by"
-                            aria-describedby="posts_byHelp"
-                            class="form-control"
-                            value="{{ $settings::get('blogs.posts_by', '') }}"
-                        />
-                        <div id="posts_byHelp" class="form-text">{{ __('dicms-blog::blogger.settings.posts.by.help') }}</div>
-                    </div>
                 </div>
 
                 <div class="col">
