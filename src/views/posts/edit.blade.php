@@ -77,11 +77,21 @@
                 <div id="titleHelp" class="form-text">{{ __('dicms-blog::blogger.post.by.help') }}</div>
             </div>
 
-            <div class="mb-3">
-                <label for="body" class="form-label">{{ __('dicms-blog::blogger.post.content') }}</label>
-                <div id="editor">{!! $post->body !!}</div>
-                <div id="titleHelp" class="form-text">{{ __('dicms-blog::blogger.post.content.help') }}</div>
-                <input type="hidden" name="body" id="body" />
+            <div id="editor-container">
+                <div class="row row-cols">
+                    <button type="button" onclick="makeBig()" class="btn btn-primary" id="fs-btn">{{ __('dicms-blog::blogger.editor.fullscreen') }}</button>
+                </div>
+                <div class="row">
+                    <div class="col-md-9">
+                        <label for="body" class="form-label">{{ __('dicms-blog::blogger.post.content') }}</label>
+                        <div id="editor">{!! $post->body !!}</div>
+                        <div id="titleHelp" class="form-text">{{ __('dicms-blog::blogger.post.content.help') }}</div>
+                        <input type="hidden" name="body" id="body" />
+                    </div>
+                    <div class="col">
+                        <livewire:asset-manager :mini="true" selectAction="insertImage" />
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -117,6 +127,30 @@
         function saveData()
         {
             $('#body').val(editor.getData());
+        }
+
+        function insertImage(url)
+        {
+            editor.execute('insertImage', { source: url });
+        }
+
+        function makeBig()
+        {
+            $('#editor-container').addClass('position-fixed top-0 start-0 w-100 h-100 bg-white');
+            $('.ck-editor__editable_inline').css('height', '80vh');
+            $('.asset-manager-mini').css('height', '80vh');
+            $('#fs-btn').html('{{ __('dicms-blog::blogger.editor.fullscreen.exit') }}');
+            $('#fs-btn').attr('onclick', 'makeSmall()');
+
+        }
+
+        function makeSmall()
+        {
+            $('#editor-container').removeClass('position-fixed top-0 start-0 w-100 h-100 bg-white');
+            $('.ck-editor__editable_inline').css('height', '');
+            $('.asset-manager-mini').css('height', '');
+            $('#fs-btn').html('{{ __('dicms-blog::blogger.editor.fullscreen') }}');
+            $('#fs-btn').attr('onclick', 'makeBig()');
         }
 
     </script>

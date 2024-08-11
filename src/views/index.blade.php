@@ -13,7 +13,7 @@
                             {{ __('dicms-blog::blogger.front.posts.by') }}
                             {!! $post->posted_by !!}
                             {{ __('dicms-blog::blogger.front.posts.on') }}
-                            {{ $post->created_at->format('m/d/y h:i A') }}
+                            {{ $post->published->format(config('dicms.datetime_format')) }}
                         </span>
                     </div>
                 </a>

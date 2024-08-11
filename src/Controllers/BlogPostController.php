@@ -2,7 +2,12 @@
 
 namespace halestar\DiCmsBlogger\Controllers;
 use halestar\DiCmsBlogger\Models\BlogPost;
+use halestar\DiCmsBlogger\Models\CssFiles;
+use halestar\DiCmsBlogger\Models\CustomFiles;
 use halestar\LaravelDropInCms\DiCMS;
+use halestar\LaravelDropInCms\Models\Footer;
+use halestar\LaravelDropInCms\Models\Header;
+use halestar\LaravelDropInCms\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -63,6 +68,8 @@ class BlogPostController
             'published' => 'nullable|boolean',
         ]);
         $post->fill($data);
+        if(isset($data['published']) && $data['published'] && !$post->published)
+            $post->published = date('Y-m-d H:i:s');
         $post->save();
         return redirect(DiCMS::dicmsRoute('admin.blog.posts.index'));
     }
@@ -78,7 +85,9 @@ class BlogPostController
     {
         Gate::authorize('settings', BlogPost::class);
         $settings = config('dicms.settings_class');
-        return view('dicms-blog::settings', compact('settings'));
+        $customFiles = new CustomFiles();
+        $defaultSite = Site::defaultSite();
+        return view('dicms-blog::settings', compact('settings', 'customFiles', 'defaultSite'));
     }
 
     public function updateSettings(Request $request)
@@ -97,4 +106,36 @@ class BlogPostController
         $settings::set('blogs.post_body', $request->input('post_body', ''));
         return redirect(DiCMS::dicmsRoute('admin.blog.posts.index'));
     }
+
+    public function updateContent(Request $request)
+    {
+        $customFiles = new CustomFiles();
+
+        $header_id = $request->input('header_id', null);
+        if($header_id)
+        {
+            $header = Header::find($header_id);
+            if($header)
+                $customFiles->setHeader($header);
+            else
+                $customFiles->setHeader(null);
+        }
+        else
+            $customFiles->setHeader(null);
+
+        $footer_id = $request->input('footer_id', null);
+        if($footer_id)
+        {
+            $footer = Footer::find($footer_id);
+            if($footer)
+                $customFiles->setFooter($footer);
+            else
+                $customFiles->setFooter(null);
+        }
+        else
+            $customFiles->setFooter(null);
+
+        return redirect()->back();
+    }
+
 }

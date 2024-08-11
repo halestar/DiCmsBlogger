@@ -3,7 +3,7 @@
     "description": "A plugin to the halestar/laravel-drop-in-cms that adds blogging capabilities to the CMS.",
     "type": "plugin",
     "require": {
-        "halestar/laravel-drop-in-cms": "^0.3.7"
+        "halestar/laravel-drop-in-cms": "^0.4.0"
     },
     "license": "GPL-3.0-or-later",
     "autoload": {

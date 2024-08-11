@@ -2,6 +2,19 @@
 
 All notable changes to `LaravelDropInCMS` will be documented in this file
 
+## 0.4.0
+
+A major upgrade mainly due to the new DiCMS System. New features related to this system:
+
+* Published field is no longer a boolean, but rather datetime field.
+  * It shows up as the published date for the article.
+  * If the updated_at date is later, it will show the updated date.
+  * Not sure if you should be allowed to up-post, but I'm going to go with yes.
+* Integrated the new editor and asset manager into the system.
+  * Not much to this, since it came from the other projects, but a lot of the updates
+  were done because of this plugin.
+* Added custom headers/footers/css/js  information for the blogging system.
+
 ## 0.3.0
 
 The official documentation of this project with a full release of the Blogger plugin is

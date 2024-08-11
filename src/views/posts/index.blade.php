@@ -19,7 +19,7 @@
                         >
                             <div class="post-name">{{ $post->title }}</div>
                             <div>
-                                created: {{ $post->created_at->format('m/d/Y h:i A') }}
+                                created: {{ $post->created_at->format(config('dicms.datetime_format')) }}
                                 @if($post->published)
                                     <span class="badge bg-primary ms-3">{{ strtolower(__('dicms-blog::blogger.published')) }}</span>
                                 @else

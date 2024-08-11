@@ -12,13 +12,14 @@ class BlogPost extends Model
     use BackUpable;
 
     protected static function getTablesToBackup(): array { return [ config('dicms.table_prefix') . "blog_posts" ]; }
-    protected $fillable = ['title', 'subtitle', 'slug', 'posted_by', 'body', 'published'];
+    protected $fillable = ['title', 'subtitle', 'slug', 'posted_by', 'body'];
     public function casts()
     {
         return
             [
-                'published' => 'boolean',
+                'published' => 'datetime: m/d/Y h:i A',
                 'created_at' => 'datetime: m/d/Y h:i A',
+                'updated_at' => 'datetime: m/d/Y h:i A',
             ];
     }
 
@@ -30,6 +31,6 @@ class BlogPost extends Model
 
     public function scopePublished(Builder $query): void
     {
-        $query->where('published', true)->orderBy('created_at', 'desc');
+        $query->whereNotNull('published')->orderBy('created_at', 'desc');
     }
 }

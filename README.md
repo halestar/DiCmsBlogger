@@ -191,10 +191,11 @@ The following features need to be implemented in order to release v1.0:
 
 - The interface needs to be cleaned up
 - Posts need to be archivable
-- The dates should probably be when published, not created.
-- Better asset management.
-- Ability to add custom css/js scripts, headers and footers
+- ~~The dates should probably be when published, not created.~~
+- ~~Better asset management.~~
+- ~~Ability to add custom css/js scripts, headers and footers~~
 - Preview system
 - Finish the creating the plugin documentation
+- Better enforce the policies.
 
 Other things may be added to this list, or taken away.

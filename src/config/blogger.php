@@ -3,7 +3,7 @@ return
     [
         'policies' =>
             [
-                \halestar\DiCmsBlogger\Model\BlogPost::class => \halestar\DiCmsBlogger\Policies\BlogPostPolicy::class,
+                \halestar\DiCmsBlogger\Models\BlogPost::class => \halestar\DiCmsBlogger\Policies\BlogPostPolicy::class,
             ],
 
         'plugins' =>

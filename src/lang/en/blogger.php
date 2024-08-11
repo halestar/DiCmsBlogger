@@ -10,6 +10,9 @@ return
     'unpublished' => 'Unpublished',
     'cancel' => 'Cancel',
 
+    'editor.fullscreen' => 'Fullscreen',
+    'editor.fullscreen.exit' => 'Exit Fullscreen',
+
     'post.title' => 'Post Title',
     'post.title.help' => 'Title of the post. Required. Max 255 chars.',
     'post.title.error' => 'A post title is required and must be less than 255 characters.',
@@ -27,6 +30,7 @@ return
 
     'front.posts.by' => 'Posted by',
     'front.posts.on' => 'on',
+    'front.updated' => 'Last updated on',
 
     'settings' => 'Settings',
     'settings.update' => 'Update Settings',
