@@ -194,8 +194,11 @@ The following features need to be implemented in order to release v1.0:
 - ~~The dates should probably be when published, not created.~~
 - ~~Better asset management.~~
 - ~~Ability to add custom css/js scripts, headers and footers~~
-- Preview system
+- ~~Preview system~~
 - Finish the creating the plugin documentation
 - Better enforce the policies.
+- Archive settings
+- Archive Front Page
+- Blog Widget with either highlighted blog post, or latest entries as grapesjs widget block
 
 Other things may be added to this list, or taken away.

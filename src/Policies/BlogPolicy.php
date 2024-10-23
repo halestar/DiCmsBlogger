@@ -1,9 +1,11 @@
 <?php
 
 namespace halestar\DiCmsBlogger\Policies;
-use halestar\DiCmsBlogger\Models\BlogPost;
 
-class BlogPostPolicy
+
+use halestar\DiCmsBlogger\Models\Blog;
+
+class BlogPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -16,7 +18,7 @@ class BlogPostPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view($user = null, BlogPost $blogPost = null): bool
+    public function view($user = null, Blog $blog = null): bool
     {
         return true;
     }
@@ -32,15 +34,7 @@ class BlogPostPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update($user = null, BlogPost $blogPost = null): bool
-    {
-        return true;
-    }
-
-    /**
-     * Determine whether the user can archive or unarchive the model.
-     */
-    public function publish($user = null, BlogPost $blogPost = null): bool
+    public function update($user = null, Blog $blog = null): bool
     {
         return true;
     }
@@ -48,9 +42,16 @@ class BlogPostPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function delete($user = null, BlogPost $blogPost = null): bool
+    public function delete($user = null, Blog $blog = null): bool
     {
         return true;
     }
 
+    /**
+     * Determine whether the user can see and edit settings
+     */
+    public function settings($user = null, ): bool
+    {
+        return true;
+    }
 }

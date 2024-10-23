@@ -2,17 +2,19 @@
 
 namespace halestar\DiCmsBlogger;
 
+use halestar\DiCmsBlogger\Classes\BlogContentGrapesJsPlugin;
+use halestar\DiCmsBlogger\Classes\BlogIndexGrapesJsPlugin;
+use halestar\DiCmsBlogger\Controllers\BlogController;
 use halestar\DiCmsBlogger\Controllers\BlogPostController;
+use halestar\DiCmsBlogger\Models\Blog;
 use halestar\DiCmsBlogger\Models\BlogPost;
-use halestar\DiCmsBlogger\Models\CustomFiles;
-use halestar\LaravelDropInCms\Models\CssSheet;
-use halestar\LaravelDropInCms\Models\Footer;
-use halestar\LaravelDropInCms\Models\Header;
-use halestar\LaravelDropInCms\Models\JsScript;
+use halestar\LaravelDropInCms\DiCMS;
+use halestar\LaravelDropInCms\Models\Page;
 use halestar\LaravelDropInCms\Plugins\DiCmsPlugin;
-use halestar\LaravelDropInCms\Plugins\DiCmsPluginPage;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class DiCmsBlogger implements DiCmsPlugin
 {
@@ -22,64 +24,56 @@ class DiCmsBlogger implements DiCmsPlugin
 	 */
 	public static function adminRoutes(): void
 	{
-		Route::prefix('blog')
-            ->name('blog.')
-            ->group(function ()
-            {
-                Route::get('/settings', [BlogPostController::class, 'settings'])->name('settings');
-                Route::post('/settings', [BlogPostController::class, 'updateSettings'])->name('settings.update');
-                Route::post('/settings/content', [BlogPostController::class, 'updateContent'])->name('settings.content');
-                Route::resource('posts', BlogPostController::class)->except('show');
-            });
+        Route::put('/blogs/posts/{post}/content', [BlogPostController::class, 'updatePostContent'])
+            ->name('blogs.posts.update.content');
+        Route::resource('blogs', BlogController::class);
+        Route::resource('blogs.posts', BlogPostController::class)
+            ->shallow()
+            ->except(['show', 'index']);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function hasPublicRoute($path): bool
-	{
-		if($path == "blog" || $path == "blog/")
-            return true;
-        $matches = [];
-        if(preg_match("/^blog\/(.+)/", $path, $matches))
-            return BlogPost::where('slug', '=', $matches[1])->exists();
-        return false;
-	}
+    /**
+     * @inheritDoc
+     */
+    public static function getAdminUrl(): string
+    {
+        return DiCMS::dicmsRoute('admin.blogs.index');
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function getPublicContent($path): string
-	{
-        $settings = config('dicms.settings_class');
-        if($path == "blog" || $path == "blog/")
-            return view('dicms-blog::index', compact('settings'))->render();
-        if(preg_match("/^blog\/(.+)/", $path, $matches))
-        {
-            $post = BlogPost::where('slug', '=', $matches[1])->first();
-            return view('dicms-blog::post', compact('post', 'settings'))->render();
-        }
-        abort(404);
-	}
+    /**
+     * @inheritDoc
+     */
+    public static function getPluginMenuName(): string
+    {
+        return __('dicms-blog::blogger.blog');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getPolicyModel(): string
+    {
+        return Blog::class;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getRoutePrefix(): string
+    {
+        return "blogs";
+    }
 
 	/**
 	 * @inheritDoc
 	 */
 	public static function getPublicPages(): array
 	{
-		return
-            [
-                new DiCmsPluginPage( __('dicms-blog::blogger.blogs'), "blog"),
-            ];
+        $pages = [];
+        foreach(Blog::all() as $blog)
+            $pages[] = $blog->indexPage;
+		return $pages;
 
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public static function getEntryPoint(): \halestar\LaravelDropInCms\Plugins\DiCmsPluginHome
-	{
-		return new DiCmsBloggerHome();
 	}
 
 	/**
@@ -87,42 +81,77 @@ class DiCmsBlogger implements DiCmsPlugin
 	 */
 	public static function getBackUpableTables(): array
 	{
-		return [ BlogPost::class ];
+		return [ Blog::class, BlogPost::class ];
 	}
 
-    public static function getCssFiles($path): ?Collection
+    public static function getGrapesJsPlugins(): array
     {
-        $settings = config('dicms.settings_class');
-        $cssFileIds = $settings::get(CustomFiles::CSS_KEY, []);
-        $cssFiles = new Collection();
-        foreach ($cssFileIds as $cssFileId)
-            $cssFiles->push(CssSheet::find($cssFileId));
-        if($cssFiles->count() == 0)
-            return null;
-        return $cssFiles;
+        return [ new BlogContentGrapesJsPlugin(), new BlogIndexGrapesJsPlugin() ];
     }
 
-    public static function getJsFiles($path): ?Collection
+    public static function projectCss(Page $page): string
     {
-        $settings = config('dicms.settings_class');
-        $jsScriptIds = $settings::get(CustomFiles::JS_KEY, []);
-        $jsScripts = new Collection();
-        foreach ($jsScriptIds as $jsScriptId)
-            $jsScripts->push(JsScript::find($jsScriptId));
-        if($jsScripts->count() == 0)
-            return null;
-        return $jsScripts;
+        //no matter the type of page, we leave the CSS untouched.
+        return $page->css;
     }
 
-    public static function getHeader($path): ?Header
+    public static function projectHtml(Page $page): string
     {
-        $customFiles = new CustomFiles();
-        return $customFiles->getHeader();
+        //we will need the page slug.
+        //which page is this?
+        if(Str::of($page->name)->endsWith('Index'))
+        {
+            //based on the slug, load the blog.
+            $slug = basename($page->url);
+            $blog = Blog::where('slug', $slug)->first();
+            //we have the index, so it's the easy option.
+            if($blog)
+                return Blade::render($page->html, ['posts' => BlogPost::where('blog_id', $blog->id)->get()]);
+            //since we did not find a blog, we abort
+            abort(404);
+        }
+        else
+        {
+            $slug = basename(url()->current());
+            //if we get a default "post-slug", then make up a random post
+            if($slug == "post-slug")
+            {
+                $blogSlug = Request::segment(count(Request::segments()) - 1);
+                $blog = Blog::where('slug', $blogSlug)->first();
+                if($blog)
+                {
+                    $blogPost = $blog->blogPosts()->published()->inRandomOrder()->first();
+                    if($blogPost)
+                        return Blade::render($page->html, ['post' => $blogPost]);
+                }
+                $blogPost = BlogPost::published()->inRandomOrder()->first();
+                if($blogPost)
+                    return Blade::render($page->html, ['post' => $blogPost]);
+                abort(404);
+            }
+            //in this case, it's a blog
+            $blogPost = BlogPost::published()->where('slug', $slug)->first();
+            if($blogPost)
+                return Blade::render($page->html, ['post' => $blogPost]);
+            abort(404);
+        }
     }
 
-    public static function getFooter($path): ?Footer
+    public static function hasPublicRoute(?string $path): ?Page
     {
-        $customFiles = new CustomFiles();
-        return $customFiles->getFooter();
+        $matches = [];
+        $search = '/' . DiCmsBlogger::getRoutePrefix() . '\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)$/';
+        if(preg_match($search, $path, $matches))
+        {
+            //search for a blog
+            $blog = Blog::where('slug', $matches[1])->first();
+            if($blog)
+                return $blog->postPage;
+            //if not, try to match a post
+            $blogPost = BlogPost::where('slug', $matches[2])->first();
+            if($blogPost)
+                return $blogPost->blog->postPage;
+        }
+        return null;
     }
 }

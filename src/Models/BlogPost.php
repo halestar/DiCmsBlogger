@@ -2,10 +2,18 @@
 
 namespace halestar\DiCmsBlogger\Models;
 
+use halestar\DiCmsBlogger\DiCmsBlogger;
+use halestar\DiCmsBlogger\Models\Scopes\OrderRevChronoScope;
+use halestar\LaravelDropInCms\DiCMS;
 use halestar\LaravelDropInCms\Traits\BackUpable;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
+#[ScopedBy([OrderRevChronoScope::class])]
 class BlogPost extends Model
 {
 
@@ -32,5 +40,36 @@ class BlogPost extends Model
     public function scopePublished(Builder $query): void
     {
         $query->whereNotNull('published')->orderBy('created_at', 'desc');
+    }
+
+    public function blog(): BelongsTo
+    {
+        return $this->belongsTo(Blog::class, 'blog_id');
+    }
+
+    protected function byLine(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => __('dicms-blog::blogger.front.post.byline',
+                [
+                    'name' => $this->posted_by,
+                    'date' => $this->published->format(config('dicms.datetime_format')),
+                ])
+        );
+    }
+
+    protected function lead(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Str::of($this->body)->stripTags()->words(25, '...')
+        );
+    }
+
+    protected function url(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => DiCMS::dicmsPublicRoute() . "/" . DiCmsBlogger::getRoutePrefix() . "/" .
+                $this->blog->slug . "/" . $this->slug
+        );
     }
 }

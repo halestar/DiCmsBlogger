@@ -3,6 +3,36 @@
 return
 [
     'blog' => 'Blog',
+    "blogs.none" => "There are no Blogs. Go create some!",
+    'blogs.available' => 'Available Blogs',
+    'blogs.new' => 'New Blog',
+    'blogs.create' => 'Create New Blog',
+    'blogs.update' => 'Update Blog',
+    'blogs.view' => 'View Blog',
+    'blogs.delete.confirm' => 'Are you sure you want to delete this Blog?',
+
+
+    'blogs.name' => 'Blog Name',
+    'blogs.name.help' => 'The name of the blog.',
+    'blogs.name.error' => 'You must enter a name for this blog.',
+    'blogs.description' => 'Blog Description',
+    'blogs.description.help' => 'The description of the blog.',
+    'blogs.slug' => 'Blog Slug',
+    'blogs.slug.help' => 'The last part of the path that this blog will appear at.',
+    'blogs.slug.error' => 'You must enter the slug where the blog resides in.',
+    'blogs.url' => 'Blog URL',
+    'blogs.path' => 'Blog Path',
+
+
+    'blogs.success.created' => 'Blog created successfully.',
+    'blogs.success.updated' => 'Blog updated successfully.',
+    'blogs.success.deleted' => 'Blog deleted successfully.',
+
+
+
+    'posts' => 'Blog Posts',
+    "posts.none" => "There are no Blog Entries for this site. Go create some!",
+
     'blogs' => 'Blog Posts',
     'blog.new' => 'New Blog Post',
     'blog.update' => 'Update Blog Post',
@@ -24,9 +54,24 @@ return
     'post.by.help' => 'The person posting this. It can be a name, an email, or even an HTML element.',
     'post.content' => 'Post Content',
     'post.content.help' => 'The content of the post.',
+    'post.lead' => 'Post Lead',
+    'post.lead.desc' => 'Post Lead (25 words)',
+    'post.link' => 'Post Link',
     'post.publish' => 'Publish Post',
     'post.delete' => 'Delete Post',
     'post.delete.confirm' => 'Are you sure you want to delete this post?',
+    'post.byline' => 'Posted Byline',
+    'post.publish.date' => 'Published Date',
+    'post.list' => 'Blog Post List',
+
+    'post.url' => 'Blog URL',
+    'post.url.path' => 'Path',
+
+
+    'posts.number' => '#Posts',
+
+    'front.post.byline' => 'Posted by :name on :date',
+    'front.post.lead' => 'Lead',
 
     'front.posts.by' => 'Posted by',
     'front.posts.on' => 'on',
@@ -35,14 +80,17 @@ return
     'settings' => 'Settings',
     'settings.update' => 'Update Settings',
     'settings.blog' => 'Blog Settings',
-    'settings.posts.container' => 'Blog Posts Container',
-    'settings.posts.container.help' => 'This HTML will be added to the <div></div> definition that surrounds the list of blog posts.',
-    'settings.posts.ul' => 'Blog Posts UL Container',
-    'settings.posts.ul.help' => 'This HTML will be added to the <ul></ul> definition that surrounds the list of blog posts.',
-    'settings.posts.li' => 'Blog Posts LI Container',
-    'settings.posts.li.help' => 'This HTML will be added to the <li></li> definition that surrounds each blog posts.',
-    'settings.posts.link' => 'Blog Posts Link Container',
-    'settings.posts.link.help' => 'This HTML will be added to the <a></a> definition that surrounds the link to each blog post entry.',
+    'settings.posts.container' => 'Blog List Structure',
+    'settings.structure.preview' => 'Post Preview Structure',
+    'settings.posts.container.help' => 'Wrapper container for the list of blog items',
+    'settings.posts.ul.help' => 'List container wrapping the list of blog posts',
+    'settings.posts.li.help' => 'List Item containing blog post.',
+    'settings.posts.link.help' => 'Link pointing to the blog post',
+    'settings.posts.wrapper.help' => 'Wrapper for the post',
+    'settings.posts.title.help' => 'Wrapper for the post title',
+    'settings.posts.subtitle.help' => 'Wrapper for the post sub-title',
+    'settings.posts.byline.help' => 'Wrapper for the post byline',
+    'settings.posts.lead.help' => 'Wrapper for the first 100 characters of the post as a taste.',
     'settings.posts.by' => 'Blog Posts Posted By Container',
     'settings.posts.by.help' => 'This HTML will be added to the <span></span> definition that surrounds the posted date information',
 
@@ -59,5 +107,14 @@ return
     'settings.post.by.help' => 'This HTML will b added to the <span></span> definition that surrounds the post\'s posted information',
     'settings.post.body' => 'Blog Post Body Container',
     'settings.post.body.help' => 'This HTML will be added to the <div></div> definition that surrounds the post\'s body',
+    'settings.blogs.header' => "Blog Header",
+    'settings.blogs.footer' => "Blog Footer",
 
+    'errors.blog.title' => 'You must enter a title for this blog.',
+    'errors.blog.slug' => 'The slug you selected is already in use. Please use a unique one.',
+    'errors.blog.posted_by' => 'You must enter who this is posted by.',
+
+    'posts.success.created' => 'Blog Post created successfully.',
+    'posts.success.updated' => 'Blog Post updated successfully.',
+    'posts.success.deleted' => 'Blog Post deleted successfully.',
 ];

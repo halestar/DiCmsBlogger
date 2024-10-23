@@ -1,12 +1,10 @@
-@extends('dicms::layouts.admin', ['include_text_editor' => ['editor' => '#editor']])
+@extends("dicms::layouts.admin.index", ['template' => $template, 'include_text_editor' => ['editor' => '#editor']])
 
-@section('content')
-    <div class="container">
-        <div class="border-bottom display-4 text-primary mb-5">{{ __('dicms-blog::blogger.blog.update') }}</div>
-        <form action="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blog.posts.update', ['post' => $post->id]) }}" method="POST" onsubmit="saveData()">
+@section('index_content')
+    <div class="row border-end border-start border-bottom rounded-bottom p-1 collapse advanced_options" id="advanced_options">
+        <form method="POST" action="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.posts.update', ['post' => $post->id]) }}">
             @csrf
             @method('PUT')
-
             <div class="form-check form-switch mb-3">
                 <input
                     class="form-check-input"
@@ -74,37 +72,67 @@
                     value="{{ $post->posted_by }}"
                 />
                 <x-error-display key="posted_by">{{ $errors->first('posted_by') }}</x-error-display>
-                <div id="titleHelp" class="form-text">{{ __('dicms-blog::blogger.post.by.help') }}</div>
+                <div id="posted_byHelp" class="form-text">{{ __('dicms-blog::blogger.post.by.help') }}</div>
             </div>
 
-            <div id="editor-container">
-                <div class="row row-cols">
-                    <button type="button" onclick="makeBig()" class="btn btn-primary" id="fs-btn">{{ __('dicms-blog::blogger.editor.fullscreen') }}</button>
-                </div>
-                <div class="row">
-                    <div class="col-md-9">
-                        <label for="body" class="form-label">{{ __('dicms-blog::blogger.post.content') }}</label>
-                        <div id="editor">{!! $post->body !!}</div>
-                        <div id="titleHelp" class="form-text">{{ __('dicms-blog::blogger.post.content.help') }}</div>
-                        <input type="hidden" name="body" id="body" />
-                    </div>
-                    <div class="col">
-                        <livewire:asset-manager :mini="true" selectAction="insertImage" />
+            <div class="row justify-content-center mb-3">
+                <div class="col col-auto">
+                    <h5 class="alert-heading">{{ __('dicms-blog::blogger.post.url') }}</h5>
+                    <div class="row">
+                        <div class="col col-auto text-end pe-0 me-0">
+                            <div
+                                class="bg-dark-subtle ps-2 rounded-start border-bottom border-start border-top border-dark py-2 h3 fw-bold">{{ \halestar\LaravelDropInCms\DiCMS::dicmsPublicRoute() }}
+                                /
+                            </div>
+                            <div class="form-text mx-3 text-center">{{ __('dicms::pages.front_url') }}</div>
+                        </div>
+                        <div class="col col-auto text-center px-0 mx-0" id="path_display_container">
+                            <div class="bg-secondary-subtle border-bottom border-top border-secondary py-2 h3 fw-bold"
+                                 id="path_display">blog/
+                            </div>
+                            <div class="form-text mx-3 text-center">{{ __('dicms-blog::blogger.post.url.path') }}</div>
+                        </div>
+                        <div class="col col-auto text-start ps-0 ms-0" id="slug_display_container">
+                            <div
+                                class="bg-primary-subtle rounded-end border-bottom border-top border-end border-primary pe-2 py-2 h3 fw-bold"
+                                id="slug_display">{{ $post->slug }}
+                            </div>
+                            <div class="form-text mx-3 text-center">{{ __('dicms-blog::blogger.post.slug') }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <button class="btn btn-primary col-md m-1" type="submit">Update Post</button>
-                <button
-                    class="btn btn-danger col-md m-1"
-                    type="button"
-                    onclick="confirmDelete('{{ __('dicms-blog::blogger.post.delete.confirm') }}', '{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blog.posts.destroy', ['post' => $post->id]) }}')"
-                >{{ __('dicms-blog::blogger.post.delete') }}</button>
-                <a class="btn btn-secondary col-md m-1" role="button" href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blog.posts.store') }}">{{ __('common.cancel') }}</a>
+
+            <div class="row py-2">
+                <button type="submit" class="btn btn-primary col">{{ __('dicms::headers.settings.advanced.update') }}</button>
             </div>
         </form>
     </div>
+    <div class="row mt-0 justify-content-center">
+        <div class="col col-auto border-end border-bottom border-start rounded-bottom p-2">
+            <a href="#" data-bs-toggle="collapse" data-bs-target=".advanced_options">
+                <i class="fa-solid fa-angles-down advanced_options collapse show" ></i>
+                <i class="fa-solid fa-angles-up advanced_options collapse" ></i>
+                {{ __('dicms::pages.settings.advanced') }}
+            </a>
+        </div>
+    </div>
+
+    <form action="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blogs.posts.update.content', ['post' => $post->id]) }}" method="POST" onsubmit="saveData()">
+        @csrf
+        @method('PUT')
+        <div id="editor-container">
+            <label for="body" class="form-label">{{ __('dicms-blog::blogger.post.content') }}</label>
+            <div id="editor">{!! $post->body !!}</div>
+            <div id="titleHelp" class="form-text">{{ __('dicms-blog::blogger.post.content.help') }}</div>
+            <input type="hidden" name="body" id="body" />
+        </div>
+        <div class="row mt-3">
+            <button class="btn btn-primary col mx-1" type="submit">Update Post</button>
+        </div>
+    </form>
+
 @endsection
 @push('scripts')
     <script>
@@ -132,25 +160,6 @@
         function insertImage(url)
         {
             editor.execute('insertImage', { source: url });
-        }
-
-        function makeBig()
-        {
-            $('#editor-container').addClass('position-fixed top-0 start-0 w-100 h-100 bg-white');
-            $('.ck-editor__editable_inline').css('height', '80vh');
-            $('.asset-manager-mini').css('height', '80vh');
-            $('#fs-btn').html('{{ __('dicms-blog::blogger.editor.fullscreen.exit') }}');
-            $('#fs-btn').attr('onclick', 'makeSmall()');
-
-        }
-
-        function makeSmall()
-        {
-            $('#editor-container').removeClass('position-fixed top-0 start-0 w-100 h-100 bg-white');
-            $('.ck-editor__editable_inline').css('height', '');
-            $('.asset-manager-mini').css('height', '');
-            $('#fs-btn').html('{{ __('dicms-blog::blogger.editor.fullscreen') }}');
-            $('#fs-btn').attr('onclick', 'makeBig()');
         }
 
     </script>

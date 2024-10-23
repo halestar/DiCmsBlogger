@@ -17,6 +17,8 @@ class CustomFiles extends Synth implements ContainsCssSheets, ContainsJsScripts
     public const JS_KEY = "blogs.js_scripts";
     public const HEADER_KEY = "blogs.header";
     public const FOOTER_KEY = "blogs.footer";
+    public const INCLUDE_SITE_CSS = "blogs.include_site.css";
+    public const INCLUDE_SITE_JS = "blogs.include_site.js";
     public Collection $cssFiles;
     public Collection $jsScripts;
 
@@ -33,6 +35,18 @@ class CustomFiles extends Synth implements ContainsCssSheets, ContainsJsScripts
         $this->jsScripts = new Collection();
         foreach ($jsScriptIds as $jsScriptId)
             $this->jsScripts->push(JsScript::find($jsScriptId));
+    }
+
+    public function includeSiteCss(): bool
+    {
+        $settings = config('dicms.settings_class');
+        return $settings::get(CustomFiles::INCLUDE_SITE_CSS, true);
+    }
+
+    public function setIncludeSiteCss(bool $includeSiteCss)
+    {
+        $settings = config('dicms.settings_class');
+        $settings::set(CustomFiles::INCLUDE_SITE_CSS, $includeSiteCss);
     }
 
     public function getCssSheets(): Collection
@@ -69,6 +83,18 @@ class CustomFiles extends Synth implements ContainsCssSheets, ContainsJsScripts
         $settings = config('dicms.settings_class');
         $settings::set(CustomFiles::CSS_KEY, $this->cssFiles->pluck('id')->toArray());
 	}
+
+    public function includeSiteJs(): bool
+    {
+        $settings = config('dicms.settings_class');
+        return $settings::get(CustomFiles::INCLUDE_SITE_JS, true);
+    }
+
+    public function setIncludeSiteJs(bool $includeSiteJs)
+    {
+        $settings = config('dicms.settings_class');
+        $settings::set(CustomFiles::INCLUDE_SITE_JS, $includeSiteJs);
+    }
 
     public function getJsScripts(): Collection
     {
