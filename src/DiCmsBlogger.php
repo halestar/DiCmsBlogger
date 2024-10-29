@@ -106,7 +106,7 @@ class DiCmsBlogger implements DiCmsPlugin
             $blog = Blog::where('slug', $slug)->first();
             //we have the index, so it's the easy option.
             if($blog)
-                return Blade::render($page->html, ['posts' => BlogPost::where('blog_id', $blog->id)->get()]);
+                return Blade::render($page->html, ['posts' => BlogPost::where('blog_id', $blog->id)->published()->get()]);
             //since we did not find a blog, we abort
             abort(404);
         }

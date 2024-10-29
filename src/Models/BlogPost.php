@@ -53,7 +53,7 @@ class BlogPost extends Model
             get: fn () => __('dicms-blog::blogger.front.post.byline',
                 [
                     'name' => $this->posted_by,
-                    'date' => $this->published->format(config('dicms.datetime_format')),
+                    'date' => ($this->published? $this->published->format(config('dicms.datetime_format')): "TBD"),
                 ])
         );
     }
