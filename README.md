@@ -174,31 +174,30 @@ returns the model that is checked before access to your plugin is given.
 <a id="roadmap"></a>
 ## Roadmap to 1.0
 
-At the time of writing this, this package is not what I consider "released".
-My plan is officially release as a v1.0 once all the features are built.
-This space here is meant to detail what features and upgrades I consider
-essential to release a v1.0
+Following a structured approach, the path to a stable 1.0 release for Blogger will be 
+based on clear milestones, each tackling significant areas to ensure both functionality 
+and usability are polished. The versioning will follow a system where the third decimal 
+represents bug fixes, the second decimal signifies milestone completion, and major 
+revisions will indicate significant feature finalization.
 
-These requirements are subject (and in fact, most likely) to change and
-I will cross them out (probably) as I build things.  I plan on keeping
-stable releases as odd versions and using even versions as dev, unstable
-releases.  For example, the first release (considered stable, I know) is
-v0.1.0 and the latest is set to v0.1.3. Once all these new instructions are
-written up and released, I will create a v0.3.0 release for both DiCms and
-the Blogger Plugin.
+For a complete description of each milestones, please see my 
+[Blog Post](https://dev.kalinec.net/blogs/dicms/the-future-of-blogger) that
+explains each milestone.
 
-The following features need to be implemented in order to release v1.0:
-
-- The interface needs to be cleaned up
-- Posts need to be archivable
-- ~~The dates should probably be when published, not created.~~
-- ~~Better asset management.~~
-- ~~Ability to add custom css/js scripts, headers and footers~~
-- ~~Preview system~~
-- Finish the creating the plugin documentation
-- Better enforce the policies.
-- Archive settings
-- Archive Front Page
-- Blog Widget with either highlighted blog post, or latest entries as grapesjs widget block
-
-Other things may be added to this list, or taken away.
+- Version 0.6
+  - Complete Blog Post Enhancements: Implement social sharing options, post thumbnails, excerpts, and SEO fields.
+  - Launch Basic Widget Support: Create initial widgets, including a search widget and promotions widget.
+  - Finalize GrapesJS Plugin Enhancements: Add Next/Previous Post navigation, Featured Post block, and filtering options.
+- Version 0.7
+  - Finalize Archive and Display Features: Set up auto-archiving, archive page, and post search functionality.
+  - Complete Advanced Tagging and Categorization: Add a tag cloud, hierarchical categories, and related posts functionality.
+  - Develop Basic Blog SEO and Analytics: Set up blog-wide SEO metadata and enable analytics integration.
+- Version 0.8
+  - Introduce Comprehensive Blog Layout Customization: Add layout options (grid, list, masonry), customizable headers/footers, and pagination/infinite scroll options.
+  - Expand Widget Variety: Integrate additional widgets, including a customizable sidebar and RSS feed.
+- Version 0.9
+  - Focus on Quality of Life Improvements: Test the entire admin interface for mobile compatibility, improve backup functionalities, and refine documentation for end-users.
+  - Conduct Thorough Testing: Write and implement tests for all primary models and core functionalities to ensure stability.
+- Version 1.0
+  - Release as a Complete and Stable Version: Ensure all planned features are fully implemented, documented, and thoroughly tested.
+  - Address any remaining bug fixes or minor adjustments based on user feedback and testing insights.

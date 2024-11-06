@@ -13,6 +13,6 @@ class OrderRevChronoScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->orderByRaw('published IS NOT NULL')->orderBy('published', 'desc');
+        $builder->whereNotNull('published')->orderBy('published', 'desc');
     }
 }

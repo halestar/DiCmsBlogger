@@ -201,8 +201,78 @@
                                 name: '{{ __('dicms-blog::blogger.post.link') }}',
                                 attributes:
                                     {
-                                        href: '@{{$page->url}}',
+                                        href: '@{{$post->url}}',
                                         type: 'ALINK',
+                                    },
+                                traits:
+                                    [
+                                        'title'
+                                    ],
+                            }
+                    },
+                view:
+                    {
+                        tagName: 'div',
+                        onRender({el})
+                        {
+                            $(el).css('padding', '1em').css('width', '100%')
+                        }
+                    }
+            });
+
+        Components.addType('next-link',
+            {
+                extend: 'blade-variable',
+                isComponent(el)
+                {
+                    return el.tagName === "A" && el.attributes.type === 'NLINK'
+                },
+                model:
+                    {
+                        defaults:
+                            {
+                                tagName: 'a',
+                                droppable: true,
+                                name: 'Next Post Link',
+                                attributes:
+                                    {
+                                        href: '@{{$post->next_link}}',
+                                        type: 'NLINK',
+                                    },
+                                traits:
+                                    [
+                                        'title'
+                                    ],
+                            }
+                    },
+                view:
+                    {
+                        tagName: 'div',
+                        onRender({el})
+                        {
+                            $(el).css('padding', '1em').css('width', '100%')
+                        }
+                    }
+            });
+
+        Components.addType('prev-link',
+            {
+                extend: 'blade-variable',
+                isComponent(el)
+                {
+                    return el.tagName === "A" && el.attributes.type === 'PLINK'
+                },
+                model:
+                    {
+                        defaults:
+                            {
+                                tagName: 'a',
+                                droppable: true,
+                                name: 'Prev Post Link',
+                                attributes:
+                                    {
+                                        href: '@{{$post->prev_link}}',
+                                        type: 'PLINK',
                                     },
                                 traits:
                                     [
@@ -305,6 +375,28 @@
             content:
                 {
                     type: "blade-variable-article-link",
+                },
+        });
+
+        Blocks.add('PrevLink', {
+            select: true,
+            category: "{{ __('dicms-blog::blogger.blog') }}",
+            label: "Previous Post",
+            media: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM271 135c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-87 87 87 87c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L167 273c-9.4-9.4-9.4-24.6 0-33.9L271 135z"/></svg>`,
+            content:
+                {
+                    type: "prev-link",
+                },
+        });
+
+        Blocks.add('NextLink', {
+            select: true,
+            category: "{{ __('dicms-blog::blogger.blog') }}",
+            label: "Next Post",
+            media: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z"/></svg>`,
+            content:
+                {
+                    type: "next-link",
                 },
         });
     };

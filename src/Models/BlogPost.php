@@ -72,4 +72,34 @@ class BlogPost extends Model
                 $this->blog->slug . "/" . $this->slug
         );
     }
+
+    protected function nextLink(): Attribute
+    {
+        return Attribute::make
+        (
+            get: function ()
+            {
+                $nextPost = BlogPost::where('blog_id', $this->blog_id)->where('published', '>', $this->published)
+                    ->orderBy('published', 'asc')->first();
+                if($nextPost)
+                    return $nextPost->url;
+                return "";
+            }
+        );
+    }
+
+    protected function prevLink(): Attribute
+    {
+        return Attribute::make
+        (
+            get: function ()
+            {
+                $prevPost = BlogPost::where('blog_id', $this->blog_id)->where('published', '<', $this->published)
+                    ->orderBy('published', 'desc')->first();
+                if($prevPost)
+                    return $prevPost->url;
+                return "";
+            }
+        );
+    }
 }

@@ -2,10 +2,11 @@
 
 @section('index_content')
 
-    <div class="row">
-        <div class="col">
-            <div class="input-group">
-                <span class="input-group-text fw-bolder ms-auto">Blog Index Page:</span>
+    <div class="d-flex justify-content-between">
+        <div class="">
+            <div class="input-group mb-3">
+                <span class="input-group-text fw-bolder">Blog Index Page:</span>
+                @if($blog->indexPage)
                 <a class="input-group-text">
                     {{ \halestar\LaravelDropInCms\DiCMS::dicmsPublicRoute() . "/" . $blog->indexPage->url }}
                 </a>
@@ -13,6 +14,7 @@
                     href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.pages.show', ['page' => $blog->index_id]) }}"
                     class="btn btn-outline-primary"
                     type="button"
+                    title="Edit Page"
                 >
                     <i class="fa fa-edit"></i>
                 </a>
@@ -20,31 +22,92 @@
                     href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.preview.home', ['path' => $blog->indexPage->url]) }}"
                     class="btn btn-outline-info me-auto"
                     type="button"
+                    title="Preview Page"
                 >
                     <i class="fa fa-eye"></i>
                 </a>
+                @else
+                    <span class="input-group-text text-bg-danger">No Page Exists</span>
+                    <a
+                        href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blogs.pages.index.create', ['blog' => $blog->id]) }}"
+                        class="input-group-text btn btn-outline-primary"
+                        type="button"
+                        title="Create Page"
+                    >
+                        <i class="fa fa-plus"></i>
+                    </a>
+                @endif
             </div>
-        </div>
-        <div class="col">
+
+            <div class="input-group  mb-3">
+                <span class="input-group-text fw-bolder">Blog Post Page:</span>
+                @if($blog->postPage)
+                    <a class="input-group-text">
+                        {{ \halestar\LaravelDropInCms\DiCMS::dicmsPublicRoute() . "/" . $blog->postPage->url }}
+                    </a>
+                    <a
+                        href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.pages.show', ['page' => $blog->post_id]) }}"
+                        class="input-group-text btn btn-outline-primary"
+                        type="button"
+                        title="Edit Page"
+                    >
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <a
+                        href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.preview.home', ['path' => $blog->postPage->url]) }}"
+                        class="btn btn-outline-info me-auto"
+                        type="button"
+                        title="Preview Page"
+                    >
+                        <i class="fa fa-eye"></i>
+                    </a>
+                @else
+                    <span class="input-group-text text-bg-danger">No Page Exists</span>
+                    <a
+                        href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blogs.pages.posts.create', ['blog' => $blog->id]) }}"
+                        class="input-group-text btn btn-outline-primary"
+                        type="button"
+                        title="Create Page"
+                    >
+                        <i class="fa fa-plus"></i>
+                    </a>
+                @endif
+            </div>
+
             <div class="input-group">
-                <span class="input-group-text fw-bolder ms-auto">Blog Post Page:</span>
-                <a class="input-group-text">
-                    {{ \halestar\LaravelDropInCms\DiCMS::dicmsPublicRoute() . "/" . $blog->postPage->url }}
-                </a>
-                <a
-                    href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.pages.show', ['page' => $blog->post_id]) }}"
-                    class="input-group-text btn btn-outline-primary"
-                    type="button"
-                >
-                    <i class="fa fa-edit"></i>
-                </a>
-                <a
-                    href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.preview.home', ['path' => $blog->postPage->url]) }}"
-                    class="btn btn-outline-info me-auto"
-                    type="button"
-                >
-                    <i class="fa fa-eye"></i>
-                </a>
+                <span class="input-group-text fw-bolder">Blog Archive Page:</span>
+                @if($blog->archivePage)
+                    <a class="input-group-text">
+                        {{ \halestar\LaravelDropInCms\DiCMS::dicmsPublicRoute() . "/" . $blog->archivePage->url }}
+                    </a>
+                    <a
+                        href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.pages.show', ['page' => $blog->archive_id]) }}"
+                        class="input-group-text btn btn-outline-primary"
+                        type="button"
+                        title="Edit Page"
+                    >
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <a
+                        href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.preview.home', ['path' => $blog->archivePage->url]) }}"
+                        class="btn btn-outline-info me-auto"
+                        type="button"
+                        title="Preview Page"
+                    >
+                        <i class="fa fa-eye"></i>
+                    </a>
+                @else
+                    <span class="input-group-text text-bg-danger">No Page Exists</span>
+                    <a
+                        href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blogs.pages.archive.create', ['blog' => $blog->id]) }}"
+                        class="input-group-text btn btn-outline-primary"
+                        type="button"
+                        title="Create Page"
+                    >
+                        <i class="fa fa-plus"></i>
+                    </a>
+                @endif
+
             </div>
         </div>
     </div>

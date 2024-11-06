@@ -29,6 +29,31 @@
                 <div id="descriptionHelp" class="form-text">{{ __('dicms-blog::blogger.blogs.description.help') }}</div>
             </div>
 
+            <div class="input-group mb-3">
+                <div class="input-group-text">
+                    <input
+                        class="form-check-input mt-0"
+                        type="checkbox"
+                        name="auto_archive"
+                        id="auto_archive"
+                        @if($blog->auto_archive) checked @endif
+                        value="1"
+                    />
+                </div>
+                <label for="auto_archive" class="input-group-text">Auto-archive posts after</label>
+                <input
+                    type="number"
+                    name="archive_after"
+                    id="archive_after"
+                    min="1"
+                    max="100"
+                    class="form-control @error('archive_after') is-invalid @enderror"
+                    value="{{ $blog->archive_after }}"
+                />
+                <label for="archive_after" class="input-group-text">posts</label>
+            </div>
+            <x-error-display key="name">{{ $errors->first('archive_after') }}</x-error-display>
+
             <div class="mb-3">
                 <label for="slug" class="form-label">{{ __('dicms-blog::blogger.blogs.slug') }}</label>
                 <input
