@@ -117,4 +117,6 @@ return
     'posts.success.created' => 'Blog Post created successfully.',
     'posts.success.updated' => 'Blog Post updated successfully.',
     'posts.success.deleted' => 'Blog Post deleted successfully.',
+
+    'saved' => 'Saved',
 ];

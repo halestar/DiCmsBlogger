@@ -15,7 +15,6 @@ use halestar\LaravelDropInCms\DiCMS;
 use halestar\LaravelDropInCms\Models\Page;
 use halestar\LaravelDropInCms\Plugins\DiCmsPlugin;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -126,16 +125,14 @@ class DiCmsBlogger implements DiCmsPlugin
     {
         //we will need the page slug.
         //which page is this?
-        Log::debug("in projectHTML");
         if(Str::of($page->name)->endsWith('Index'))
         {
-            Log::debug("in index");
             //based on the slug, load the blog.
             $slug = basename($page->url);
             $blog = Blog::where('slug', $slug)->first();
             //we have the index, so it's the easy option.
             if($blog)
-                return Blade::render($page->html, ['posts' => $blog->unArchivedBlogPosts()]);
+                return Blade::render($page->html, ['posts' => $blog->unArchivedBlogPosts(), 'page' => $page]);
             //since we did not find a blog, we abort
             abort(404);
         }
@@ -143,16 +140,14 @@ class DiCmsBlogger implements DiCmsPlugin
         {
             //based on the slug, load the blog.
             $slug = Request::segment(count(Request::segments()) - 1);
-            Log::debug("in archive, url is " . $page->url . ", slug is " . $slug);
             $blog = Blog::where('slug', $slug)->first();
             if($blog)
-                return Blade::render($page->html, ['archivedPosts' => $blog->archivedBlogPosts()]);
+                return Blade::render($page->html, ['archivedPosts' => $blog->archivedBlogPosts(), 'page' => $page]);
             //since we did not find a blog, we abort
             abort(404);
         }
         else
         {
-            Log::debug("in post");
             $slug = basename(url()->current());
             //if we get a default "post-slug", then make up a random post
             if($slug == "post-slug")
@@ -163,17 +158,17 @@ class DiCmsBlogger implements DiCmsPlugin
                 {
                     $blogPost = $blog->blogPosts()->published()->inRandomOrder()->first();
                     if($blogPost)
-                        return Blade::render($page->html, ['post' => $blogPost]);
+                        return Blade::render($page->html, ['post' => $blogPost, 'page' => $page]);
                 }
                 $blogPost = BlogPost::published()->inRandomOrder()->first();
                 if($blogPost)
-                    return Blade::render($page->html, ['post' => $blogPost]);
+                    return Blade::render($page->html, ['post' => $blogPost, 'page' => $page]);
                 abort(404);
             }
             //in this case, it's a blog
             $blogPost = BlogPost::published()->where('slug', $slug)->first();
             if($blogPost)
-                return Blade::render($page->html, ['post' => $blogPost]);
+                return Blade::render($page->html, ['post' => $blogPost, 'page' => $page]);
             abort(404);
         }
     }
@@ -205,5 +200,10 @@ class DiCmsBlogger implements DiCmsPlugin
                 Route::apiResource('blogs', BlogApiController::class);
                 Route::apiResource('blogs.posts', BlogPostApiController::class)->shallow();
             });
+    }
+
+    public static function widgets(): array
+    {
+        return [];
     }
 }

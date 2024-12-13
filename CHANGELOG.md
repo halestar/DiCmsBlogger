@@ -1,6 +1,14 @@
 # Changelog
 
 All notable changes to `LaravelDropInCMS` will be documented in this file
+## 0.5.5
+
+Not a major update, but an important one:
+
+* Moves the text editor from DiCMS to here, as it is only used in one page
+  * Editor is now in a Livewire widget
+  * Editor now autosaves every minute
+  * New plugin was created for fullscreen.
 
 ## 0.5.0
 

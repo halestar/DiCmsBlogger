@@ -1,5 +1,8 @@
-@extends("dicms::layouts.admin.index", ['template' => $template, 'include_text_editor' => ['editor' => '#editor']])
-
+@extends("dicms::layouts.admin.index", ['template' => $template])
+@push('head_scripts')
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+@endpush
 @section('index_content')
     <div class="row border-end border-start border-bottom rounded-bottom p-1 collapse advanced_options" id="advanced_options">
         <form method="POST" action="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.posts.update', ['post' => $post->id]) }}">
@@ -118,25 +121,11 @@
             </a>
         </div>
     </div>
-
-    <form action="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blogs.posts.update.content', ['post' => $post->id]) }}" method="POST" onsubmit="saveData()">
-        @csrf
-        @method('PUT')
-        <div id="editor-container">
-            <label for="body" class="form-label">{{ __('dicms-blog::blogger.post.content') }}</label>
-            <div id="editor">{!! $post->body !!}</div>
-            <div id="titleHelp" class="form-text">{{ __('dicms-blog::blogger.post.content.help') }}</div>
-            <input type="hidden" name="body" id="body" />
-        </div>
-        <div class="row mt-3">
-            <button class="btn btn-primary col mx-1" type="submit">Update Post</button>
-        </div>
-    </form>
+    <livewire:text-editor :post="$post" />
 
 @endsection
 @push('scripts')
     <script>
-        var editor;
         function cleanSlug(event)
         {
             $('#slug').val($('#slug').val().replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase());
@@ -152,15 +141,9 @@
             }
         }
 
-        function saveData()
-        {
-            $('#body').val(editor.getData());
-        }
-
         function insertImage(url)
         {
-            editor.execute('insertImage', { source: url });
+            window.editor.execute('insertImage', { source: url });
         }
-
     </script>
 @endpush

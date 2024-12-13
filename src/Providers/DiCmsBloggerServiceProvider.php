@@ -2,7 +2,7 @@
 
 namespace halestar\DiCmsBlogger\Providers;
 
-use halestar\DiCmsBlogger\Models\CustomFiles;
+use halestar\DiCmsBlogger\Livewire\TextEditor;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -26,6 +26,6 @@ class DiCmsBloggerServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/../views', 'dicms-blog');
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'dicms-blog');
-        Livewire::propertySynthesizer(CustomFiles::class);
+        Livewire::component('text-editor', TextEditor::class);
     }
 }
