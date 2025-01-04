@@ -232,10 +232,10 @@
                             {
                                 tagName: 'share-bar',
                                 stylable: true,
-                                content: '<div><a class="share-btn facebook">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$facebookSvg !!} Facebook</a>' +
-                                    '<a class="share-btn reddit">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$redditSvg !!} Reddit</a>' +
-                                    '<a class="share-btn linkedin">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$linkedinSvg !!} LinkedIn</a>' +
-                                    '<a class="share-btn bluesky">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$blueskySvg !!} Blue Sky</a></div>',
+                                content: '<div><a class="share-btn facebook">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$FacebookSvg !!} Facebook</a>' +
+                                    '<a class="share-btn reddit">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$RedditSvg !!} Reddit</a>' +
+                                    '<a class="share-btn linkedin">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$LinkedinSvg !!} LinkedIn</a>' +
+                                    '<a class="share-btn bluesky">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$BlueskySvg !!} Blue Sky</a></div>',
                             },
                         toHTML: function()
                         {

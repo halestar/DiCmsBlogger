@@ -2,6 +2,10 @@
 
 All notable changes to `DiCmsBlogger` will be documented in this file
 
+## 0.6.1
+
+Fixes the share bar component.
+
 ## 0.6.0
 
 Blogger's first milestone! This is a major update that add a lot of functionality, 

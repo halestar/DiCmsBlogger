@@ -129,7 +129,7 @@
                                 @if(in_array('facebook', $blog->social_media??[])) checked @endif
                                 name="social_media[]"
                             />
-                            <label class="form-check-label p-2 border rounded" style="background-color: #8b9dc3;" for="social_media_facebook">
+                            <label class="form-check-label p-2 border rounded" style="background-color: #3a579a;" for="social_media_facebook">
                                 <i class="fa-brands fa-square-facebook"></i> {{ __('dicms-blog::blogger.social.facebook') }}
                             </label>
                         </div>
@@ -142,7 +142,7 @@
                                 @if(in_array('reddit', $blog->social_media??[])) checked @endif
                                 name="social_media[]"
                             />
-                            <label class="form-check-label p-2 border rounded" style="background-color: #ff5700;" for="social_media_reddit">
+                            <label class="form-check-label p-2 border rounded" style="background-color: #FF4500;" for="social_media_reddit">
                                 <i class="fa-brands fa-square-reddit"></i> {{ __('dicms-blog::blogger.social.reddit') }}
                             </label>
                         </div>
@@ -155,7 +155,7 @@
                                 @if(in_array('linkedIn', $blog->social_media??[])) checked @endif
                                 name="social_media[]"
                             />
-                            <label class="form-check-label p-2 border rounded" style="background-color: #0077b5;" for="social_media_linkedIn">
+                            <label class="form-check-label p-2 border rounded" style="background-color: #007AB6;" for="social_media_linkedIn">
                                 <i class="fa-brands fa-linkedin"></i> {{ __('dicms-blog::blogger.social.linkedin') }}
                             </label>
                         </div>
@@ -176,10 +176,6 @@
 
                 </div>
             </div>
-
-
-
-
             <div class="row">
                 <button type="submit" class="btn btn-primary col m-2">{{ __('dicms::admin.update') }}</button>
             </div>
