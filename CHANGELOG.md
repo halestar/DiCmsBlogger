@@ -1,6 +1,44 @@
 # Changelog
 
-All notable changes to `LaravelDropInCMS` will be documented in this file
+All notable changes to `DiCmsBlogger` will be documented in this file
+
+## 0.6.0
+
+Blogger's first milestone! This is a major update that add a lot of functionality, 
+which necessitated a new revision bump. It will also need to be used with the new
+`DiCMS` version 0.6.1, which adds support for metadata.
+
+* Adds official blog images to the blogs.
+  * Users can provide a url to an image (usually uploaded through the image manager)
+to serve as the blog's main image
+  * This image can be used in any of the blog pages as a widget through GrapesJs
+* Adds official images to blog posts
+  * Same as blog images but for each individual post.
+  * Appears in any page where the $post variable is accessible.
+* Adds a description to the post
+  * This is mainly for metadata
+  * Replaces the old lead
+* Adds metadata options!
+  * Uses DiCMS metadata system to customize it for each blog and post.
+  * Each post can now be tagged with metadata
+  * Each blog can now be tagged with metadata
+  * Post takes priority, defaults to blog, then to page.
+* Adds share bar to the posts!
+  * This is a "bar" with a bunch of social media places to share your post to
+  * Contents of the bar (which social media are available) are configured at the blog level
+  * Current support for Facebook, Reddit, LinkedIn and BlueSky.
+  * I don't support twitter/X so you're on your own if you like that cesspool
+* Adds widgets!
+  * Widget support is now enabled
+  * First widget, highlighted posts, is available
+  * Highlighted Posts lets the user select posts to highlight and display them in any page.
+* Adds extra options to the post page
+  * Adds a "full title"
+  * Adds the image
+  * Updates the lead
+
+
+
 ## 0.5.5
 
 Not a major update, but an important one:

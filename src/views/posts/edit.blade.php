@@ -78,6 +78,31 @@
                 <div id="posted_byHelp" class="form-text">{{ __('dicms-blog::blogger.post.by.help') }}</div>
             </div>
 
+            <div class="mb-3">
+                <label for="image" class="form-label">{{ __('dicms-blog::blogger.post.image') }}</label>
+                <input
+                    type="url"
+                    name="image"
+                    id="image"
+                    aria-describedby="imageHelp"
+                    class="form-control"
+                    value="{{ $post->image }}"
+                />
+                <div id="imageHelp" class="form-text">{{ __('dicms-blog::blogger.post.image.help') }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">{{ __('dicms-blog::blogger.post.description') }}</label>
+                <textarea
+                    type="url"
+                    name="description"
+                    id="description"
+                    aria-describedby="descriptionHelp"
+                    class="form-control"
+                >{{ $post->description }}</textarea>
+                <div id="descriptionHelp" class="form-text">{{ __('dicms-blog::blogger.post.description.help') }}</div>
+            </div>
+
             <div class="row justify-content-center mb-3">
                 <div class="col col-auto">
                     <h5 class="alert-heading">{{ __('dicms-blog::blogger.post.url') }}</h5>
@@ -121,7 +146,7 @@
             </a>
         </div>
     </div>
-    <livewire:text-editor :post="$post" />
+    <livewire:dicms-blogger.text-editor :post="$post" />
 
 @endsection
 @push('scripts')

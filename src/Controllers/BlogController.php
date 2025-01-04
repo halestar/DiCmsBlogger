@@ -82,6 +82,7 @@ class BlogController extends Controller
                 'name' => 'required|max:255',
                 'description' => 'nullable',
                 'slug' => 'required|max:255',
+                'image' => 'nullable|url'
             ], $this->errors());
         $blog = new Blog();
         $blog->fill($data);
@@ -115,6 +116,13 @@ class BlogController extends Controller
                     'text' => "<i class='fa-solid fa-gear'></i>",
                     'classes' => 'text-primary',
                     'title' => __('dicms::sites.edit_site'),
+                ];
+            $template['buttons']['metadata']  =
+                [
+                    'link' => DiCMS::dicmsRoute('admin.blogs.metadata', ['blog' => $blog->id]),
+                    'text' => "<i class='fa-solid fa-info'></i>",
+                    'classes' => 'text-primary',
+                    'title' => __('dicms-blog::blogger.metadata'),
                 ];
         }
         return view('dicms-blog::blogs.show', compact('blog', 'template'));
@@ -158,6 +166,8 @@ class BlogController extends Controller
                 'slug' => 'required|max:255',
                 'auto_archive' => 'nullable|boolean',
                 'archive_after' => 'exclude_unless:auto_archive,1|required|numeric|min:1|max:100',
+                'image' => 'nullable|url',
+                'social_media' => 'nullable|array',
             ], $this->errors());
         $data['auto_archive'] = $request->input('auto_archive', '0');
         $blog->fill($data);
@@ -202,5 +212,26 @@ class BlogController extends Controller
             $blog->createArchivePage();
         return redirect(DiCMS::dicmsRoute('admin.pages.show', ['page' => $blog->archivePage->id]))
             ->with('success-status', __('dicms-blog::blogger.blogs.success.updated'));
+    }
+
+    public function metadata(Blog $blog)
+    {
+        Gate::authorize('update', $blog);
+        $template =
+            [
+                'title' => __('dicms-blog::blogger.metadata'),
+                'buttons' =>
+                    [
+                        'back'  =>
+                            [
+                                'link' => DiCMS::dicmsRoute('admin.blogs.show', ['blog' => $blog->id]),
+                                'text' => '<i class="fa-solid fa-rotate-left"></i>',
+                                'classes' => 'text-secondary',
+                                'title' => __('dicms::admin.back'),
+                            ]
+                    ]
+            ];
+        $obj = $blog;
+        return view('dicms-blog::blogs.metadata', compact('obj', 'template'));
     }
 }

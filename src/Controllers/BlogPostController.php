@@ -3,7 +3,6 @@
 namespace halestar\DiCmsBlogger\Controllers;
 use halestar\DiCmsBlogger\Models\Blog;
 use halestar\DiCmsBlogger\Models\BlogPost;
-use halestar\DiCmsBlogger\Models\CssFiles;
 use halestar\LaravelDropInCms\DiCMS;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -49,6 +48,8 @@ class BlogPostController
             'title' => 'required',
             'subtitle' => 'nullable',
             'slug' => 'required|max:255|unique:' . config('dicms.table_prefix') . 'blog_posts,slug',
+            'description' => 'nullable',
+            'image' => 'nullable|url',
             'posted_by' => 'required',
         ], $this->errors());
         $post = new BlogPost();

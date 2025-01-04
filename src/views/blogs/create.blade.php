@@ -35,13 +35,26 @@
                     name="slug"
                     id="slug"
                     aria-describedby="slugHelp"
-                    class="form-control @error('name') is-invalid @enderror"
+                    class="form-control @error('slug') is-invalid @enderror"
                     value="{{ old('slug') }}"
                     onkeyup="cleanSlug()"
                     onchange="cleanSlug()"
                 />
                 <x-error-display key="slug">{{ $errors->first('slug') }}</x-error-display>
                 <div id="slugHelp" class="form-text">{{ __('dicms-blog::blogger.blogs.slug.help') }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">{{ __('dicms-blog::blogger.blogs.image') }}</label>
+                <input
+                    type="url"
+                    name="image"
+                    id="image"
+                    aria-describedby="imageHelp"
+                    class="form-control"
+                    value="{{ old('image') }}"
+                />
+                <div id="imageHelp" class="form-text">{{ __('dicms-blog::blogger.blogs.image.help') }}</div>
             </div>
 
             <div class="row justify-content-center">

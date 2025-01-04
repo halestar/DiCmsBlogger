@@ -2,7 +2,11 @@
 
 namespace halestar\DiCmsBlogger\Providers;
 
+use halestar\DiCmsBlogger\Livewire\HighlightedPostsConfig;
 use halestar\DiCmsBlogger\Livewire\TextEditor;
+use halestar\DiCmsBlogger\View\Components\HighlightedPosts;
+use halestar\DiCmsBlogger\View\Components\PostShareBar;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -26,6 +30,10 @@ class DiCmsBloggerServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/../views', 'dicms-blog');
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'dicms-blog');
-        Livewire::component('text-editor', TextEditor::class);
+        Livewire::component('dicms-blogger.text-editor', TextEditor::class);
+        Livewire::component('dicms-blogger.highlighted-posts-config', HighlightedPostsConfig::class);
+
+        Blade::component('dicms-blogger.post-share-bar', PostShareBar::class);
+        Blade::component('dicms-blogger.highlighted-posts', HighlightedPosts::class);
     }
 }

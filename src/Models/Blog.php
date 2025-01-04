@@ -3,29 +3,35 @@
 namespace halestar\DiCmsBlogger\Models;
 
 use halestar\DiCmsBlogger\DiCmsBlogger;
+use halestar\LaravelDropInCms\Classes\MetadataEntry;
+use halestar\LaravelDropInCms\DiCMS;
+use halestar\LaravelDropInCms\Interfaces\ContainsMetadata;
 use halestar\LaravelDropInCms\Models\Page;
 use halestar\LaravelDropInCms\Models\Scopes\OrderByNameScope;
 use halestar\LaravelDropInCms\Traits\BackUpable;
+use halestar\LaravelDropInCms\Traits\HasMetadata;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 #[ScopedBy([OrderByNameScope::class])]
-class Blog extends Model
+class Blog extends Model implements ContainsMetadata
 {
-	use BackUpable;
+	use BackUpable, HasMetadata;
 
 	protected static function getTablesToBackup(): array { return [ config('dicms.table_prefix') . "blogs" ]; }
 
-	protected $fillable = ['name', 'description', 'slug', 'index_id', 'post_id', 'auto_archive', 'archive_after'];
+	protected $fillable = ['name', 'description', 'slug', 'index_id', 'post_id', 'auto_archive', 'archive_after', 'image', 'social_media'];
 
     public function casts()
     {
         return
             [
                 'auto_archive' => 'boolean',
+                'social_media' => 'array',
             ];
     }
 
@@ -114,5 +120,40 @@ class Blog extends Model
         $this->archivePage()->associate($archivePage);
         $this->save();
         return $archivePage;
+    }
+
+    protected function url(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => DiCMS::dicmsPublicRoute() . "/" . DiCmsBlogger::getRoutePrefix() . "/" .
+                $this->slug
+        );
+    }
+
+    public function getMetadata(): array
+    {
+        $metadata = $this->metadata;
+        if(!$metadata || count($metadata) == 0)
+        {
+            $metadata = [];
+            $metadata[] = new MetadataEntry('author', $this->name?? '');
+            $metadata[] = new MetadataEntry('description', $this->description?? '');
+            $metadata[] = new MetadataEntry('title', $this->name?? '');
+            $metadata[] = new MetadataEntry('twitter:card', "summary_large_image");
+            $metadata[] = new MetadataEntry('twitter:title', $this->name?? '');
+            $metadata[] = new MetadataEntry('twitter:description', $this->description?? '');
+            $metadata[] = new MetadataEntry('twitter:image', $this->image?? '');
+            $metadata[] = new MetadataEntry('og:type', "article");
+            $metadata[] = new MetadataEntry('og:title', $this->name?? '');
+            $metadata[] = new MetadataEntry('og:description', $this->description?? '');
+            $metadata[] = new MetadataEntry('og:image', $this->image?? '');
+            $metadata[] = new MetadataEntry('og:url', $this->url?? '');
+        }
+        return $metadata;
+    }
+    public function setMetadata(array $metadata)
+    {
+        $this->metadata = $metadata;
+        $this->save();
     }
 }

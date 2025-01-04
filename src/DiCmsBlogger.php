@@ -11,6 +11,7 @@ use halestar\DiCmsBlogger\Controllers\BlogController;
 use halestar\DiCmsBlogger\Controllers\BlogPostController;
 use halestar\DiCmsBlogger\Models\Blog;
 use halestar\DiCmsBlogger\Models\BlogPost;
+use halestar\DiCmsBlogger\Widgets\HighlightedPostsWidget;
 use halestar\LaravelDropInCms\DiCMS;
 use halestar\LaravelDropInCms\Models\Page;
 use halestar\LaravelDropInCms\Plugins\DiCmsPlugin;
@@ -41,6 +42,9 @@ class DiCmsBlogger implements DiCmsPlugin
                 Route::get('/posts/create', 'createPostPage')->name('posts.create');
                 Route::get('/archive/create', 'createArchivePage')->name('archive.create');
             });
+
+        //metadata
+        Route::get('/blogs/{blog}/metadata', [BlogController::class, 'metadata'])->name('blogs.metadata');
 
         Route::resource('blogs', BlogController::class);
         Route::resource('blogs.posts', BlogPostController::class)
@@ -204,6 +208,73 @@ class DiCmsBlogger implements DiCmsPlugin
 
     public static function widgets(): array
     {
-        return [];
+        return [HighlightedPostsWidget::class];
+    }
+
+    public static function projectMetadata(Page $page): array
+    {
+        //we will need the page slug.
+        //which page is this?
+        if(Str::of($page->name)->endsWith('Index'))
+        {
+            //based on the slug, load the blog.
+            $slug = basename($page->url);
+            $blog = Blog::where('slug', $slug)->first();
+            //we have the index, so it's the easy option.
+            if($blog)
+            {
+                //blog metadata
+                return $blog->getMetadata();
+            }
+            //since we did not find a blog, we return nothing
+            return [];
+        }
+        elseif(Str::of($page->name)->endsWith('Archive'))
+        {
+            //based on the slug, load the blog.
+            $slug = Request::segment(count(Request::segments()) - 1);
+            $blog = Blog::where('slug', $slug)->first();
+            if($blog)
+            {
+                //blog metadata
+                return $blog->getMetadata();
+            }
+            //since we did not find a blog, we return nothing
+            return [];
+        }
+        else
+        {
+            $slug = basename(url()->current());
+            //if we get a default "post-slug", then make up a random post
+            if($slug == "post-slug")
+            {
+                $blogSlug = Request::segment(count(Request::segments()) - 1);
+                $blog = Blog::where('slug', $blogSlug)->first();
+                if($blog)
+                {
+                    $blogPost = $blog->blogPosts()->published()->inRandomOrder()->first();
+                    if($blogPost)
+                    {
+                        //blog post metadata
+                        return $blogPost->getMetadata();
+                    }
+                }
+                $blogPost = BlogPost::published()->inRandomOrder()->first();
+                if($blogPost)
+                {
+                    //blog post metadata
+                    return $blogPost->getMetadata();
+                }
+                return [];
+            }
+            //in this case, it's a blog
+            $blogPost = BlogPost::published()->where('slug', $slug)->first();
+            if($blogPost)
+            {
+                //blog post metadata
+                return $blogPost->getMetadata();
+            }
+            return [];
+        }
     }
 }

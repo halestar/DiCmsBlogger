@@ -22,20 +22,26 @@ return
     'blogs.slug.error' => 'You must enter the slug where the blog resides in.',
     'blogs.url' => 'Blog URL',
     'blogs.path' => 'Blog Path',
+    'blogs.image' => 'Blog Image',
+    'blogs.image.help' => 'URL for the blog\'s default image.  This image will be used as a fallback for the post\'s image.',
 
 
     'blogs.success.created' => 'Blog created successfully.',
     'blogs.success.updated' => 'Blog updated successfully.',
     'blogs.success.deleted' => 'Blog deleted successfully.',
 
+    'blogs.archive.auto' => 'Auto-archive posts after',
 
 
+
+    'post' => 'Post|Posts',
     'posts' => 'Blog Posts',
     "posts.none" => "There are no Blog Entries for this site. Go create some!",
 
     'blogs' => 'Blog Posts',
     'blog.new' => 'New Blog Post',
     'blog.update' => 'Update Blog Post',
+    'blog.url.front' => 'The URL to your front page',
     'published' => 'Published',
     'unpublished' => 'Unpublished',
     'cancel' => 'Cancel',
@@ -63,6 +69,14 @@ return
     'post.byline' => 'Posted Byline',
     'post.publish.date' => 'Published Date',
     'post.list' => 'Blog Post List',
+    'post.link.next' => 'Next Post',
+    'post.link.prev' => 'Previous Post',
+    'posts.share.bar' => 'Share Bar',
+
+    'post.image' => 'Blog Post Image',
+    'post.image.help' => 'URL for the post\'s image.',
+    'post.description' => 'Blog Post Description',
+    'post.description.help' => 'A description of this post\'s content.',
 
     'post.url' => 'Blog URL',
     'post.url.path' => 'Path',
@@ -77,7 +91,7 @@ return
     'front.posts.on' => 'on',
     'front.updated' => 'Last updated on',
 
-    'settings' => 'Settings',
+    'settings' => 'Blog Settings',
     'settings.update' => 'Update Settings',
     'settings.blog' => 'Blog Settings',
     'settings.posts.container' => 'Blog List Structure',
@@ -119,4 +133,23 @@ return
     'posts.success.deleted' => 'Blog Post deleted successfully.',
 
     'saved' => 'Saved',
+
+    'metadata' => 'Blog Metadata',
+    'metadata.warning' => 'Changing or adding any of these settings will override the blog metadata. ' .
+        'All the fields here are populated automatically from the blog\'s information. Changing them means ' .
+        'that the blog\'s metadata will be out of sync with the blog\'s information. To re-sync the metadata, '.
+        'click the Clear All Metadata Entries button above.',
+
+    'social' => "Social Media",
+    'social.sharing' => "Social Media Sharing",
+    'social.facebook' => "Facebook",
+    'social.reddit' => "Reddit",
+    'social.linkedin' => "LinkedIn",
+    'social.bluesky' => "Bluesky",
+
+    'widgets.highlighted' => 'Highlighted Posts',
+    'widgets.highlighted.no' => 'There are no highlighted posts.',
+    'widgets.highlight' => 'Highlight',
+    'widgets.highlighted.description' => 'Highlighted Posts',
+    'widgets.highlighted.from.blog' => 'Highlight post from blog',
 ];

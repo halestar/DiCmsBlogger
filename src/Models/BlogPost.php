@@ -4,6 +4,7 @@ namespace halestar\DiCmsBlogger\Models;
 
 use halestar\DiCmsBlogger\DiCmsBlogger;
 use halestar\DiCmsBlogger\Models\Scopes\OrderRevChronoScope;
+use halestar\LaravelDropInCms\Classes\MetadataEntry;
 use halestar\LaravelDropInCms\DiCMS;
 use halestar\LaravelDropInCms\Traits\BackUpable;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 #[ScopedBy([OrderRevChronoScope::class])]
@@ -20,11 +22,12 @@ class BlogPost extends Model
     use BackUpable;
 
     protected static function getTablesToBackup(): array { return [ config('dicms.table_prefix') . "blog_posts" ]; }
-    protected $fillable = ['title', 'subtitle', 'slug', 'posted_by', 'body'];
+    protected $fillable = ['title', 'subtitle', 'slug', 'posted_by', 'body', 'description', 'image', 'social_media'];
     public function casts()
     {
         return
             [
+                'social_media' => 'array',
                 'published' => 'datetime: m/d/Y h:i A',
                 'created_at' => 'datetime: m/d/Y h:i A',
                 'updated_at' => 'datetime: m/d/Y h:i A',
@@ -61,7 +64,7 @@ class BlogPost extends Model
     protected function lead(): Attribute
     {
         return Attribute::make(
-            get: fn () => Str::of($this->body)->stripTags()->words(25, '...')
+            get: fn () => $this->description?? Str::of($this->body)->stripTags()->words(25, '...')
         );
     }
 
@@ -101,5 +104,37 @@ class BlogPost extends Model
                 return "";
             }
         );
+    }
+
+    protected function fullTitle(): Attribute
+    {
+        return Attribute::make
+        (
+            get: fn() => $this->title . ($this->subtitle? ": " . $this->subtitle: "")
+        );
+    }
+
+    public function getMetadata(): array
+    {
+        $metadata = [];
+        $metadata[] = new MetadataEntry('author', $this->posted_by?? '');
+        $metadata[] = new MetadataEntry('description', $this->description?? $this->blog->description?? '');
+        $metadata[] = new MetadataEntry('title', $this->fullTitle?? '');
+        $metadata[] = new MetadataEntry('twitter:card', "summary_large_image");
+        $metadata[] = new MetadataEntry('twitter:title', $this->fullTitle?? '');
+        $metadata[] = new MetadataEntry('twitter:description', $this->description?? '');
+        $metadata[] = new MetadataEntry('twitter:image', $this->image?? '');
+        $metadata[] = new MetadataEntry('og:type', "article");
+        $metadata[] = new MetadataEntry('og:title', $this->fullTitle?? '');
+        $metadata[] = new MetadataEntry('og:description', $this->description?? '');
+        $metadata[] = new MetadataEntry('og:image', $this->image?? '');
+        $metadata[] = new MetadataEntry('og:url', $this->url?? '');
+
+        return $metadata;
+    }
+
+    public static function highlighted(): Collection
+    {
+        return BlogPost::whereNotNull('highlighted')->orderBy('highlighted')->get();
     }
 }

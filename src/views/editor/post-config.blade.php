@@ -122,8 +122,8 @@
                     {
                         defaults:
                             {
-                                name: '{{ __('dicms-blog::blogger.publish.date') }}',
-                                content: '{{ __('dicms-blog::blogger.publish.date') }}',
+                                name: '{{ __('dicms-blog::blogger.post.publish.date') }}',
+                                content: '{{ __('dicms-blog::blogger.post.publish.date') }}',
                             },
                         toHTML: function()
                         {
@@ -159,6 +159,40 @@
 
             });
 
+        Components.addType('post-img',
+            {
+                isComponent(el)
+                {
+                    return el.tagName === "IMG";
+                },
+                model:
+                    {
+                        defaults:
+                            {
+                                tagName: 'img',
+                                stylable: true,
+                                name: '{{ __('dicms-blog::blogger.blogs.image') }}',
+                                attributes:
+                                    {
+                                        src: '@{{$post->image}}',
+                                    },
+                                traits:
+                                    [
+                                        'title',
+                                        'alt',
+                                    ],
+                            }
+                    },
+                view:
+                    {
+                        tagName: 'div',
+                        onRender({el})
+                        {
+                            $(el).css('padding', '1em').css('width', '100%')
+                        }
+                    }
+            });
+
         Components.addType('blade-variable-post-lead',
             {
                 extend: 'blade-variable',
@@ -183,6 +217,44 @@
                         }
                     }
 
+            });
+
+        Components.addType('share-bar',
+            {
+                extend: 'blade-variable',
+                isComponent(el)
+                {
+                    return el.tagName === "share-bar"
+                },
+                model:
+                    {
+                        defaults:
+                            {
+                                tagName: 'share-bar',
+                                stylable: true,
+                                content: '<div><a class="share-btn facebook">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$facebookSvg !!} Facebook</a>' +
+                                    '<a class="share-btn reddit">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$redditSvg !!} Reddit</a>' +
+                                    '<a class="share-btn linkedin">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$linkedinSvg !!} LinkedIn</a>' +
+                                    '<a class="share-btn bluesky">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$blueskySvg !!} Blue Sky</a></div>',
+                            },
+                        toHTML: function()
+                        {
+                            @verbatim
+                            let classes = '';
+                            if(this.getClasses().length > 0)
+                                classes = " class='" + this.getClasses().join(' ') + "' "
+                            return "<x-dicms-blogger.post-share-bar :post='$post'" + classes + "/>";
+                            @endverbatim
+                        },
+                    },
+                view:
+                    {
+                        tagName: 'div',
+                        onRender({el})
+                        {
+                            $(el).css('padding', '1em').css('width', '100%')
+                        }
+                    }
             });
 
         Components.addType('article-link',
@@ -290,6 +362,7 @@
                     }
             });
 
+
         Blocks.add('PostTitle', {
             select: true,
             category: "{{ __('dicms-blog::blogger.blog') }}",
@@ -381,7 +454,7 @@
         Blocks.add('PrevLink', {
             select: true,
             category: "{{ __('dicms-blog::blogger.blog') }}",
-            label: "Previous Post",
+            label: "{{ __('dicms-blog::blogger.post.link.prev') }}",
             media: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM271 135c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-87 87 87 87c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L167 273c-9.4-9.4-9.4-24.6 0-33.9L271 135z"/></svg>`,
             content:
                 {
@@ -392,12 +465,35 @@
         Blocks.add('NextLink', {
             select: true,
             category: "{{ __('dicms-blog::blogger.blog') }}",
-            label: "Next Post",
+            label: "{{ __('dicms-blog::blogger.post.link.next') }}",
             media: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z"/></svg>`,
             content:
                 {
                     type: "next-link",
                 },
         });
+
+        Blocks.add('PostImg', {
+            select: true,
+            category: "{{ __('dicms-blog::blogger.blog') }}",
+            label: "{{ __('dicms-blog::blogger.blogs.image') }}",
+            media: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 96C0 60.7 28.7 32 64 32l384 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6l96 0 32 0 208 0c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z"/></svg>`,
+            content:
+                {
+                    type: "post-img",
+                },
+        });
+
+        Blocks.add('ShareBar',
+            {
+                select: true,
+                category: "{{ __('dicms-blog::blogger.social') }}",
+                label: "{{ __('dicms-blog::blogger.posts.share.bar') }}",
+                media: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zM384 160c0 35.3-28.7 64-64 64c-15.4 0-29.5-5.4-40.6-14.5L194.1 256l85.3 46.5c11-9.1 25.2-14.5 40.6-14.5c35.3 0 64 28.7 64 64s-28.7 64-64 64s-64-28.7-64-64c0-2.5 .1-4.9 .4-7.3L174.5 300c-11.7 12.3-28.2 20-46.5 20c-35.3 0-64-28.7-64-64s28.7-64 64-64c18.3 0 34.8 7.7 46.5 20l81.9-44.7c-.3-2.4-.4-4.9-.4-7.3c0-35.3 28.7-64 64-64s64 28.7 64 64z"/></svg>`,
+                content:
+                    {
+                        type: "share-bar",
+                    },
+            });
     };
 </script>

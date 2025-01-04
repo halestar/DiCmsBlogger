@@ -47,6 +47,31 @@
             </div>
 
             <div class="mb-3">
+                <label for="image" class="form-label">{{ __('dicms-blog::blogger.post.image') }}</label>
+                <input
+                    type="url"
+                    name="image"
+                    id="image"
+                    aria-describedby="imageHelp"
+                    class="form-control"
+                    value="{{ old('image') }}"
+                />
+                <div id="imageHelp" class="form-text">{{ __('dicms-blog::blogger.post.image.help') }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">{{ __('dicms-blog::blogger.post.description') }}</label>
+                <textarea
+                    type="url"
+                    name="description"
+                    id="description"
+                    aria-describedby="descriptionHelp"
+                    class="form-control"
+                >{{ old('description') }}</textarea>
+                <div id="descriptionHelp" class="form-text">{{ __('dicms-blog::blogger.post.description.help') }}</div>
+            </div>
+
+            <div class="mb-3">
                 <label for="posted_by" class="form-label">{{ __('dicms-blog::blogger.post.by') }}</label>
                 <input
                     type="text"
