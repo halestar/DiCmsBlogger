@@ -8,6 +8,7 @@ use halestar\LaravelDropInCms\DiCMS;
 use halestar\LaravelDropInCms\Interfaces\ContainsMetadata;
 use halestar\LaravelDropInCms\Models\Page;
 use halestar\LaravelDropInCms\Models\Scopes\OrderByNameScope;
+use halestar\LaravelDropInCms\Models\Site;
 use halestar\LaravelDropInCms\Traits\BackUpable;
 use halestar\LaravelDropInCms\Traits\HasMetadata;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
@@ -132,22 +133,31 @@ class Blog extends Model implements ContainsMetadata
 
     public function getMetadata(): array
     {
-        $metadata = $this->metadata;
+        $siteMetadata = Site::currentSite()->getMetadata();
+        $metadata = [];
+        foreach($siteMetadata as $entry)
+            $metadata[$entry->name] = $entry;
+        $blogMetadata = $this->metadata;
         if(!$metadata || count($metadata) == 0)
         {
             $metadata = [];
-            $metadata[] = new MetadataEntry('author', $this->name?? '');
-            $metadata[] = new MetadataEntry('description', $this->description?? '');
-            $metadata[] = new MetadataEntry('title', $this->name?? '');
-            $metadata[] = new MetadataEntry('twitter:card', "summary_large_image");
-            $metadata[] = new MetadataEntry('twitter:title', $this->name?? '');
-            $metadata[] = new MetadataEntry('twitter:description', $this->description?? '');
-            $metadata[] = new MetadataEntry('twitter:image', $this->image?? '');
-            $metadata[] = new MetadataEntry('og:type', "article");
-            $metadata[] = new MetadataEntry('og:title', $this->name?? '');
-            $metadata[] = new MetadataEntry('og:description', $this->description?? '');
-            $metadata[] = new MetadataEntry('og:image', $this->image?? '');
-            $metadata[] = new MetadataEntry('og:url', $this->url?? '');
+            $metadata['author'] = new MetadataEntry('author', $this->name?? '');
+            $metadata['description'] = new MetadataEntry('description', $this->description?? '');
+            $metadata['title'] = new MetadataEntry('title', $this->name?? '');
+            $metadata['twitter:card'] = new MetadataEntry('twitter:card', "summary_large_image");
+            $metadata['twitter:title'] = new MetadataEntry('twitter:title', $this->name?? '');
+            $metadata['twitter:description'] = new MetadataEntry('twitter:description', $this->description?? '');
+            $metadata['twitter:image'] = new MetadataEntry('twitter:image', $this->image?? '');
+            $metadata['og:type'] = new MetadataEntry('og:type', "article");
+            $metadata['og:title'] = new MetadataEntry('og:title', $this->name?? '');
+            $metadata['og:description'] = new MetadataEntry('og:description', $this->description?? '');
+            $metadata['og:image'] = new MetadataEntry('og:image', $this->image?? '');
+            $metadata['og:url'] = new MetadataEntry('og:url', $this->url?? '');
+        }
+        else
+        {
+            foreach($blogMetadata as $entry)
+                $metadata[$entry->name] = $entry;
         }
         return $metadata;
     }

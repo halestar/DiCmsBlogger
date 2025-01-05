@@ -116,19 +116,19 @@ class BlogPost extends Model
 
     public function getMetadata(): array
     {
-        $metadata = [];
-        $metadata[] = new MetadataEntry('author', $this->posted_by?? '');
-        $metadata[] = new MetadataEntry('description', $this->description?? $this->blog->description?? '');
-        $metadata[] = new MetadataEntry('title', $this->fullTitle?? '');
-        $metadata[] = new MetadataEntry('twitter:card', "summary_large_image");
-        $metadata[] = new MetadataEntry('twitter:title', $this->fullTitle?? '');
-        $metadata[] = new MetadataEntry('twitter:description', $this->description?? '');
-        $metadata[] = new MetadataEntry('twitter:image', $this->image?? '');
-        $metadata[] = new MetadataEntry('og:type', "article");
-        $metadata[] = new MetadataEntry('og:title', $this->fullTitle?? '');
-        $metadata[] = new MetadataEntry('og:description', $this->description?? '');
-        $metadata[] = new MetadataEntry('og:image', $this->image?? '');
-        $metadata[] = new MetadataEntry('og:url', $this->url?? '');
+        $metadata = $this->blog->getMetadata();
+        $metadata['author'] = new MetadataEntry('author', $this->posted_by?? '');
+        $metadata['description'] = new MetadataEntry('description', $this->description?? $this->blog->description?? '');
+        $metadata['title'] = new MetadataEntry('title', $this->fullTitle?? '');
+        $metadata['twitter:card'] = new MetadataEntry('twitter:card', "summary_large_image");
+        $metadata['twitter:title'] = new MetadataEntry('twitter:title', $this->fullTitle?? '');
+        $metadata['twitter:description'] = new MetadataEntry('twitter:description', $this->description?? '');
+        $metadata['twitter:image'] = new MetadataEntry('twitter:image', $this->image?? $this->blog->image?? '');
+        $metadata['og:type'] = new MetadataEntry('og:type', "article");
+        $metadata['og:title'] = new MetadataEntry('og:title', $this->fullTitle?? '');
+        $metadata['og:description'] = new MetadataEntry('og:description', $this->description?? '');
+        $metadata['og:image'] = new MetadataEntry('og:image', $this->image?? $this->blog->image?? '');
+        $metadata['og:url'] = new MetadataEntry('og:url', $this->url?? '');
 
         return $metadata;
     }
