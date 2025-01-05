@@ -2,6 +2,10 @@
 
 All notable changes to `DiCmsBlogger` will be documented in this file
 
+## 0.6.2
+
+Fixes the reddit icon to conform to the other icons.
+
 ## 0.6.1
 
 Fixes the share bar component.
