@@ -2,6 +2,15 @@
 
 All notable changes to `DiCmsBlogger` will be documented in this file
 
+## 0.6.4
+Adds some more options for images in the text editor.
+
+## 0.6.3
+
+Changes the way metadata is handled on blogs, so it will inherit all metadata 
+from blogs and overwrite what needs to be overwritten.
+
+
 ## 0.6.2
 
 Fixes the reddit icon to conform to the other icons.
