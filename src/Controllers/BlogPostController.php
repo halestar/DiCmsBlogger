@@ -90,6 +90,8 @@ class BlogPostController
             'slug' => ['required', 'max:255', Rule::unique(config('dicms.table_prefix') . 'blog_posts')->ignore($post)],
             'posted_by' => 'required',
             'published' => 'nullable|boolean',
+            'image' => 'nullable|url',
+            'description' => 'nullable',
         ], $this->errors());
         $post->fill($data);
         if(isset($data['published']) && $data['published'] && !$post->published)
