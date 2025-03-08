@@ -209,6 +209,10 @@
                 disallow: [
                     {
                         name: 'heading'
+                    },
+                    {
+                        name: 'img',
+                        styles: ['width', 'height'],
                     }
                 ]
             }

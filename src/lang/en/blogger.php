@@ -42,6 +42,15 @@ return
     'blog.new' => 'New Blog Post',
     'blog.update' => 'Update Blog Post',
     'blog.url.front' => 'The URL to your front page',
+
+    'blog.page.index' => 'Blog Index Page',
+    'blog.page.no' => 'No Page Exists',
+    'blog.page.post' => 'Blog Post Page',
+    'blog.page.archive' => 'Blog Archive Page',
+    'blog.page.search' => 'Blog Search Page',
+    'blogs.page.search.success' => 'Blog Search Page created successfully.',
+
+
     'published' => 'Published',
     'unpublished' => 'Unpublished',
     'cancel' => 'Cancel',
@@ -152,4 +161,25 @@ return
     'widgets.highlight' => 'Highlight',
     'widgets.highlighted.description' => 'Highlighted Posts',
     'widgets.highlighted.from.blog' => 'Highlight post from blog',
+    'widgets.search' => 'Blog Search',
+    'widgets.search.description' => 'Search through all blogs in the system',
+
+    'related.posts' => 'Related Post|Related Posts',
+    'related.posts.add' => 'Add Related Post',
+    'related.posts.no' => 'There are no Related Posts',
+    'related.posts.blog.select' => 'Select a Blog',
+    'related.posts.select' => 'Select a Post',
+
+    'tag' => 'Tag|Tags',
+    'tag.all' => 'All Tags',
+    'tag.add' => 'Add Tag',
+    'tag.placeholder' => 'Place Holder',
+    'search.blogs' => 'Search Blogs',
+    'search.bar' => 'Search Bar',
+    'search.modal' => 'Modal Search',
+    'search.no' => 'No results found.',
+    'search.input' => 'Search Input',
+    'search.button' => 'Search Button',
+    'search' => 'Search',
+    'search.results' => 'Search Results',
 ];

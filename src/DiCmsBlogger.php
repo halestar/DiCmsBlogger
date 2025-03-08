@@ -4,17 +4,21 @@ namespace halestar\DiCmsBlogger;
 
 use halestar\DiCmsBlogger\Classes\BlogArchiveGrapesJsPlugin;
 use halestar\DiCmsBlogger\Classes\BlogContentGrapesJsPlugin;
+use halestar\DiCmsBlogger\Classes\BlogGlobalGrapesJsPlugin;
 use halestar\DiCmsBlogger\Classes\BlogIndexGrapesJsPlugin;
+use halestar\DiCmsBlogger\Classes\BlogSearchGrapesJsPlugin;
 use halestar\DiCmsBlogger\Controllers\API\BlogApiController;
 use halestar\DiCmsBlogger\Controllers\API\BlogPostApiController;
 use halestar\DiCmsBlogger\Controllers\BlogController;
 use halestar\DiCmsBlogger\Controllers\BlogPostController;
 use halestar\DiCmsBlogger\Models\Blog;
 use halestar\DiCmsBlogger\Models\BlogPost;
+use halestar\DiCmsBlogger\Models\Tag;
 use halestar\DiCmsBlogger\Widgets\HighlightedPostsWidget;
 use halestar\LaravelDropInCms\DiCMS;
 use halestar\LaravelDropInCms\Models\Page;
 use halestar\LaravelDropInCms\Plugins\DiCmsPlugin;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +46,7 @@ class DiCmsBlogger implements DiCmsPlugin
                 Route::get('/posts/create', 'createPostPage')->name('posts.create');
                 Route::get('/archive/create', 'createArchivePage')->name('archive.create');
             });
+        Route::get('/blogs/search/create', [BlogController::class, 'createSearchPage'])->name('blogs.pages.search.create');
 
         //metadata
         Route::get('/blogs/{blog}/metadata', [BlogController::class, 'metadata'])->name('blogs.metadata');
@@ -90,12 +95,14 @@ class DiCmsBlogger implements DiCmsPlugin
 	public static function getPublicPages(): array
 	{
         $pages = [];
+        if(Blog::searchPage())
+            $pages[] = Blog::searchPage();
         foreach(Blog::all() as $blog)
         {
             if($blog->indexPage)
                 $pages[] = $blog->indexPage;
             if($blog->archivePage)
-            $pages[] = $blog->archivePage;
+                $pages[] = $blog->archivePage;
         }
 		return $pages;
 
@@ -106,16 +113,18 @@ class DiCmsBlogger implements DiCmsPlugin
 	 */
 	public static function getBackUpableTables(): array
 	{
-		return [ Blog::class, BlogPost::class ];
+		return [ Blog::class, BlogPost::class, Tag::class ];
 	}
 
     public static function getGrapesJsPlugins(): array
     {
         return
             [
+                new BlogGlobalGrapesJsPlugin(),
                 new BlogContentGrapesJsPlugin(),
                 new BlogIndexGrapesJsPlugin() ,
                 new BlogArchiveGrapesJsPlugin(),
+                new BlogSearchGrapesJsPlugin(),
             ];
     }
 
@@ -129,7 +138,29 @@ class DiCmsBlogger implements DiCmsPlugin
     {
         //we will need the page slug.
         //which page is this?
-        if(Str::of($page->name)->endsWith('Index'))
+        if($page->name == "BlogSearch")
+        {
+            //do we have a search page?
+            $searchPage = Blog::searchPage();
+            //if we don't, we abort
+            if(!$searchPage)
+                abort(404);
+            //else, figure out the terms.
+            $searchTerm = request()->input('search_term', '');
+            $searchTag = request()->input('search_tag', '');
+            $searchResults = new Collection();
+            if($searchTerm != '')
+                $searchResults = BlogPost::search($searchTerm)->get();
+            elseif($searchTag != '')
+            {
+                $tag = Tag::where('name', $searchTag)->first();
+                if($tag)
+                    $searchResults = $tag->posts()->get();
+            }
+            //and return the page
+            return Blade::render($page->html, ['searchResults' => $searchResults]);
+        }
+        elseif(Str::of($page->name)->endsWith('Index'))
         {
             //based on the slug, load the blog.
             $slug = basename($page->url);

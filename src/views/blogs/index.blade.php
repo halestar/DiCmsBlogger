@@ -1,6 +1,42 @@
 @extends("dicms::layouts.admin.index", ['template' => $template])
 
 @section('index_content')
+    @can('create', \halestar\DiCmsBlogger\Models\Blog::class)
+    <div class="input-group mb-3">
+        <span class="input-group-text fw-bolder">{{ __('dicms-blog::blogger.blog.page.search') }}</span>
+        @if($searchPage)
+            <a class="input-group-text">
+                {{ \halestar\LaravelDropInCms\DiCMS::dicmsPublicRoute() . "/" . $searchPage->url }}
+            </a>
+            <a
+                href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.pages.show', ['page' => $searchPage->id]) }}"
+                class="btn btn-outline-primary"
+                type="button"
+                title="Edit Page"
+            >
+                <i class="fa fa-edit"></i>
+            </a>
+            <a
+                href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.preview.home', ['path' => $searchPage->url]) }}"
+                class="btn btn-outline-info me-auto"
+                type="button"
+                title="Preview Page"
+            >
+                <i class="fa fa-eye"></i>
+            </a>
+        @else
+            <span class="input-group-text text-bg-danger">{{ __('dicms-blog::blogger.blog.page.no') }}</span>
+            <a
+                href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blogs.pages.search.create') }}"
+                class="input-group-text btn btn-outline-primary"
+                type="button"
+                title="Create Page"
+            >
+                <i class="fa fa-plus"></i>
+            </a>
+        @endif
+    </div>
+    @endcan
     @if(\halestar\DiCmsBlogger\Models\Blog::count() > 0)
         <div class="ms-1 row">
             <div class="col-2">{{ __('dicms::admin.name') }}</div>

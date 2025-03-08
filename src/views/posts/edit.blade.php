@@ -131,6 +131,15 @@
                 </div>
             </div>
 
+            <div class="row justify-content-start mb-3">
+                <div class="col-md-6">
+                    <livewire:dicms-blogger.related-post-editor :post="$post" />
+                </div>
+                <div class="col-md-6">
+                    <livewire:dicms-blogger.tag-editor :post="$post" />
+                </div>
+            </div>
+
 
             <div class="row py-2">
                 <button type="submit" class="btn btn-primary col">{{ __('dicms::headers.settings.advanced.update') }}</button>

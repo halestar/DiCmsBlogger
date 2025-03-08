@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Gate;
 class BlogController extends Controller
 {
 
+
     private function errors(): array
     {
         return
@@ -43,7 +44,8 @@ class BlogController extends Controller
                     'title' => __('dicms-blog::blogger.blogs.new'),
                 ];
         }
-        return view('dicms-blog::blogs.index', compact('template'));
+        $searchPage = Blog::searchPage();
+        return view('dicms-blog::blogs.index', compact('template', 'searchPage'));
     }
 
     /**
@@ -212,6 +214,16 @@ class BlogController extends Controller
             $blog->createArchivePage();
         return redirect(DiCMS::dicmsRoute('admin.pages.show', ['page' => $blog->archivePage->id]))
             ->with('success-status', __('dicms-blog::blogger.blogs.success.updated'));
+    }
+
+    public function createSearchPage(Request $request)
+    {
+        Gate::authorize('create', Blog::class);
+        $searchPage = Blog::searchPage();
+        if(!$searchPage)
+            $searchPage = Blog::createSearchPage();
+        return redirect(DiCMS::dicmsRoute('admin.pages.show', ['page' => $searchPage->id]))
+            ->with('success-status', __('dicms-blog::blogger.blogs.page.search.success'));
     }
 
     public function metadata(Blog $blog)

@@ -2,10 +2,15 @@
 
 namespace halestar\DiCmsBlogger\Providers;
 
+use halestar\DiCmsBlogger\Livewire\BlogSearch;
 use halestar\DiCmsBlogger\Livewire\HighlightedPostsConfig;
+use halestar\DiCmsBlogger\Livewire\RelatedPostEditor;
+use halestar\DiCmsBlogger\Livewire\TagEditor;
 use halestar\DiCmsBlogger\Livewire\TextEditor;
 use halestar\DiCmsBlogger\View\Components\HighlightedPosts;
 use halestar\DiCmsBlogger\View\Components\PostShareBar;
+use halestar\DiCmsBlogger\View\Components\RelatedLinks;
+use halestar\DiCmsBlogger\View\Components\TagView;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
@@ -32,8 +37,13 @@ class DiCmsBloggerServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'dicms-blog');
         Livewire::component('dicms-blogger.text-editor', TextEditor::class);
         Livewire::component('dicms-blogger.highlighted-posts-config', HighlightedPostsConfig::class);
+        Livewire::component('dicms-blogger.related-post-editor', RelatedPostEditor::class);
+        Livewire::component('dicms-blogger.tag-editor', TagEditor::class);
+        Livewire::component('dicms-blogger.blog-search', BlogSearch::class);
 
         Blade::component('dicms-blogger.post-share-bar', PostShareBar::class);
         Blade::component('dicms-blogger.highlighted-posts', HighlightedPosts::class);
+        Blade::component('dicms-blogger.related-links', RelatedLinks::class);
+        Blade::component('dicms-blogger.tag-view', TagView::class);
     }
 }

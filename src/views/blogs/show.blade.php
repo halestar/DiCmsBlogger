@@ -3,9 +3,9 @@
 @section('index_content')
 
     <div class="d-flex justify-content-between">
-        <div class="">
+        <div>
             <div class="input-group mb-3">
-                <span class="input-group-text fw-bolder">Blog Index Page:</span>
+                <span class="input-group-text fw-bolder">{{ __('dicms-blog::blogger.blog.page.index') }}</span>
                 @if($blog->indexPage)
                 <a class="input-group-text">
                     {{ \halestar\LaravelDropInCms\DiCMS::dicmsPublicRoute() . "/" . $blog->indexPage->url }}
@@ -27,7 +27,7 @@
                     <i class="fa fa-eye"></i>
                 </a>
                 @else
-                    <span class="input-group-text text-bg-danger">No Page Exists</span>
+                    <span class="input-group-text text-bg-danger">{{ __('dicms-blog::blogger.blog.page.no') }}</span>
                     <a
                         href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blogs.pages.index.create', ['blog' => $blog->id]) }}"
                         class="input-group-text btn btn-outline-primary"
@@ -40,7 +40,7 @@
             </div>
 
             <div class="input-group  mb-3">
-                <span class="input-group-text fw-bolder">Blog Post Page:</span>
+                <span class="input-group-text fw-bolder">{{ __('dicms-blog::blogger.blog.page.post') }}</span>
                 @if($blog->postPage)
                     <a class="input-group-text">
                         {{ \halestar\LaravelDropInCms\DiCMS::dicmsPublicRoute() . "/" . $blog->postPage->url }}
@@ -62,7 +62,7 @@
                         <i class="fa fa-eye"></i>
                     </a>
                 @else
-                    <span class="input-group-text text-bg-danger">No Page Exists</span>
+                    <span class="input-group-text text-bg-danger">{{ __('dicms-blog::blogger.blog.page.no') }}</span>
                     <a
                         href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blogs.pages.posts.create', ['blog' => $blog->id]) }}"
                         class="input-group-text btn btn-outline-primary"
@@ -75,7 +75,7 @@
             </div>
 
             <div class="input-group">
-                <span class="input-group-text fw-bolder">Blog Archive Page:</span>
+                <span class="input-group-text fw-bolder">{{ __('dicms-blog::blogger.blog.page.archive') }}</span>
                 @if($blog->archivePage)
                     <a class="input-group-text">
                         {{ \halestar\LaravelDropInCms\DiCMS::dicmsPublicRoute() . "/" . $blog->archivePage->url }}
@@ -97,7 +97,7 @@
                         <i class="fa fa-eye"></i>
                     </a>
                 @else
-                    <span class="input-group-text text-bg-danger">No Page Exists</span>
+                    <span class="input-group-text text-bg-danger">{{ __('dicms-blog::blogger.blog.page.no') }}</span>
                     <a
                         href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.blogs.pages.archive.create', ['blog' => $blog->id]) }}"
                         class="input-group-text btn btn-outline-primary"

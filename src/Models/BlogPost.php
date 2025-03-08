@@ -12,14 +12,17 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Laravel\Scout\Attributes\SearchUsingFullText;
+use Laravel\Scout\Searchable;
 
 #[ScopedBy([OrderRevChronoScope::class])]
 class BlogPost extends Model
 {
 
-    use BackUpable;
+    use BackUpable, Searchable;
 
     protected static function getTablesToBackup(): array { return [ config('dicms.table_prefix') . "blog_posts" ]; }
     protected $fillable = ['title', 'subtitle', 'slug', 'posted_by', 'body', 'description', 'image', 'social_media'];
@@ -136,5 +139,35 @@ class BlogPost extends Model
     public static function highlighted(): Collection
     {
         return BlogPost::whereNotNull('highlighted')->orderBy('highlighted')->get();
+    }
+
+    public function relatedPosts(): BelongsToMany
+    {
+        return $this->belongsToMany(BlogPost::class,
+            config('dicms.table_prefix') . 'related_posts', 'post_id', 'related_post_id');
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class,
+            config('dicms.table_prefix') . 'posts_tags', 'post_id', 'tag_id');
+    }
+
+    public function shouldBeSearchable(): bool
+    {
+        return $this->published != null;
+    }
+
+    #[SearchUsingFullText(['title','subtitle','description','posted_by','body'])]
+    public function toSearchableArray():array
+    {
+        return
+        [
+            'title' => $this->title,
+            'subtitle' => $this->subtitle,
+            'posted_by' => $this->posted_by,
+            'description' => $this->description,
+            'body' => $this->body,
+        ];
     }
 }

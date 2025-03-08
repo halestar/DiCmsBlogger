@@ -21,6 +21,7 @@ use Illuminate\Support\Collection;
 #[ScopedBy([OrderByNameScope::class])]
 class Blog extends Model implements ContainsMetadata
 {
+    public const SEARCH_PAGE_KEY = 'dicms.blogger.search_id';
 	use BackUpable, HasMetadata;
 
 	protected static function getTablesToBackup(): array { return [ config('dicms.table_prefix') . "blogs" ]; }
@@ -55,6 +56,15 @@ class Blog extends Model implements ContainsMetadata
     public function archivePage(): BelongsTo
     {
         return $this->belongsTo(Page::class, 'archive_id', 'id');
+    }
+
+    public static function searchPage(): ?Page
+    {
+        $settings = config('dicms.settings_class');
+        $search_page_id = $settings::get(self::SEARCH_PAGE_KEY, null);
+        if($search_page_id)
+            return Page::find($search_page_id);
+        return null;
     }
 
 	public function blogPosts(): HasMany
@@ -121,6 +131,21 @@ class Blog extends Model implements ContainsMetadata
         $this->archivePage()->associate($archivePage);
         $this->save();
         return $archivePage;
+    }
+
+    public static function createSearchPage(): Page
+    {
+        $searchPage = new Page();
+        $searchPage->plugin_page = true;
+        $searchPage->plugin = DiCmsBlogger::class;
+        $searchPage->name = "BlogSearch";
+        $searchPage->slug = "search";
+        $searchPage->path = DiCmsBlogger::getRoutePrefix();
+        $searchPage->url = $searchPage->path . "/" . $searchPage->slug;
+        $searchPage->save();
+        $settings = config('dicms.settings_class');
+        $settings::set(self::SEARCH_PAGE_KEY, $searchPage->id);
+        return $searchPage;
     }
 
     protected function url(): Attribute
