@@ -158,7 +158,11 @@ class Blog extends Model implements ContainsMetadata
 
     public function getMetadata(): array
     {
-        $siteMetadata = Site::currentSite()->getMetadata();
+        $activeSite = Site::activeSite();
+        if($activeSite)
+            $siteMetadata = $activeSite->getMetadata();
+        else
+            $siteMetadata = [];
         $metadata = [];
         foreach($siteMetadata as $entry)
             $metadata[$entry->name] = $entry;

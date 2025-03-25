@@ -45,7 +45,8 @@ class BlogController extends Controller
                 ];
         }
         $searchPage = Blog::searchPage();
-        return view('dicms-blog::blogs.index', compact('template', 'searchPage'));
+        $activeSite = Site::activeSite();
+        return view('dicms-blog::blogs.index', compact('template', 'searchPage', 'activeSite'));
     }
 
     /**
@@ -127,7 +128,8 @@ class BlogController extends Controller
                     'title' => __('dicms-blog::blogger.metadata'),
                 ];
         }
-        return view('dicms-blog::blogs.show', compact('blog', 'template'));
+        $activeSite = Site::activeSite();
+        return view('dicms-blog::blogs.show', compact('blog', 'template', 'activeSite'));
     }
 
     /**
@@ -136,22 +138,18 @@ class BlogController extends Controller
     public function edit(Blog $blog)
     {
         Gate::authorize('update', Blog::class);
-        $currentSite = Site::currentSite();
         $template =
             [
                 'title' => __('dicms-blog::blogger.blogs.update'),
                 'buttons' => []
             ];
-        if($currentSite)
-        {
-            $template['buttons']['back']  =
-                [
-                    'link' => DiCMS::dicmsRoute('admin.blogs.show', ['blog' => $blog->id]),
-                    'text' => '<i class="fa-solid fa-rotate-left"></i>',
-                    'classes' => 'text-secondary',
-                    'title' => __('dicms::admin.back'),
-                ];
-        }
+        $template['buttons']['back']  =
+            [
+                'link' => DiCMS::dicmsRoute('admin.blogs.show', ['blog' => $blog->id]),
+                'text' => '<i class="fa-solid fa-rotate-left"></i>',
+                'classes' => 'text-secondary',
+                'title' => __('dicms::admin.back'),
+            ];
         return view('dicms-blog::blogs.edit', compact('template', 'blog'));
     }
 

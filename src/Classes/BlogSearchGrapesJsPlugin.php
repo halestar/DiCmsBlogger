@@ -25,7 +25,7 @@ class BlogSearchGrapesJsPlugin extends DiCmsGrapesJsPlugin
 	{
         return ($objEditing instanceof Page && $objEditing->plugin_page &&
             $objEditing->plugin == 'halestar\DiCmsBlogger\DiCmsBlogger' &&
-            $objEditing->name = "BlogSearch");
+            $objEditing->name == "BlogSearch");
 	}
 
 	/**

@@ -16,14 +16,16 @@
             >
                 <i class="fa fa-edit"></i>
             </a>
-            <a
-                href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.preview.home', ['path' => $searchPage->url]) }}"
-                class="btn btn-outline-info me-auto"
-                type="button"
-                title="Preview Page"
-            >
-                <i class="fa fa-eye"></i>
-            </a>
+            @if($activeSite)
+                <a
+                    href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.preview.home', ['site' => $activeSite->id, 'path' => $searchPage->url]) }}"
+                    class="btn btn-outline-info me-auto"
+                    type="button"
+                    title="Preview Page"
+                >
+                    <i class="fa fa-eye"></i>
+                </a>
+            @endif
         @else
             <span class="input-group-text text-bg-danger">{{ __('dicms-blog::blogger.blog.page.no') }}</span>
             <a
