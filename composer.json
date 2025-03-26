@@ -6,7 +6,7 @@
         "halestar/laravel-drop-in-cms": ">=0.7.5",
         "laravel/scout": "^10.13"
     },
-    "license": "MIT License",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "halestar\\DiCmsBlogger\\": "src/",

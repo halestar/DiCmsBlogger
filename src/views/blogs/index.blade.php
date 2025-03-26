@@ -18,7 +18,7 @@
             </a>
             @if($activeSite)
                 <a
-                    href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.preview.home', ['site' => $activeSite->id, 'path' => $searchPage->url]) }}"
+                    href="{{ \halestar\LaravelDropInCms\DiCMS::dicmsRoute('admin.preview', ['site' => $activeSite->id, 'path' => $searchPage->url]) }}"
                     class="btn btn-outline-info me-auto"
                     type="button"
                     title="Preview Page"
