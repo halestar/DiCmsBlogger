@@ -14,7 +14,6 @@ use halestar\DiCmsBlogger\Controllers\BlogPostController;
 use halestar\DiCmsBlogger\Models\Blog;
 use halestar\DiCmsBlogger\Models\BlogPost;
 use halestar\DiCmsBlogger\Models\Tag;
-use halestar\DiCmsBlogger\Widgets\HighlightedPostsWidget;
 use halestar\LaravelDropInCms\DiCMS;
 use halestar\LaravelDropInCms\Models\Page;
 use halestar\LaravelDropInCms\Plugins\DiCmsPlugin;
@@ -249,7 +248,7 @@ class DiCmsBlogger implements DiCmsPlugin
 
     public static function widgets(): array
     {
-        return [HighlightedPostsWidget::class];
+        return [];
     }
 
     public static function projectMetadata(Page $page): array

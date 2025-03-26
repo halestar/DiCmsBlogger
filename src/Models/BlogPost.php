@@ -24,7 +24,14 @@ class BlogPost extends Model
 
     use BackUpable, Searchable;
 
-    protected static function getTablesToBackup(): array { return [ config('dicms.table_prefix') . "blog_posts" ]; }
+    protected static function getTablesToBackup(): array
+    {
+        return
+            [
+                config('dicms.table_prefix') . "blog_posts",
+                config('dicms.table_prefix') . "related_posts",
+            ];
+    }
     protected $fillable = ['title', 'subtitle', 'slug', 'posted_by', 'body', 'description', 'image', 'social_media'];
     public function casts()
     {

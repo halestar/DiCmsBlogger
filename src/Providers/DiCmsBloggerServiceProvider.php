@@ -39,11 +39,7 @@ class DiCmsBloggerServiceProvider extends ServiceProvider
         Livewire::component('dicms-blogger.highlighted-posts-config', HighlightedPostsConfig::class);
         Livewire::component('dicms-blogger.related-post-editor', RelatedPostEditor::class);
         Livewire::component('dicms-blogger.tag-editor', TagEditor::class);
-        Livewire::component('dicms-blogger.blog-search', BlogSearch::class);
 
         Blade::component('dicms-blogger.post-share-bar', PostShareBar::class);
-        Blade::component('dicms-blogger.highlighted-posts', HighlightedPosts::class);
-        Blade::component('dicms-blogger.related-links', RelatedLinks::class);
-        Blade::component('dicms-blogger.tag-view', TagView::class);
     }
 }

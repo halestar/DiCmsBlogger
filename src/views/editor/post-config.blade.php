@@ -41,7 +41,9 @@
                     }
             });
 
-        //containers
+        /**
+         * POST Fields
+         */
         Components.addType('blade-variable-post-title',
             {
                 extend: 'blade-variable',
@@ -219,44 +221,6 @@
 
             });
 
-        Components.addType('share-bar',
-            {
-                extend: 'blade-variable',
-                isComponent(el)
-                {
-                    return el.tagName === "share-bar"
-                },
-                model:
-                    {
-                        defaults:
-                            {
-                                tagName: 'share-bar',
-                                stylable: true,
-                                content: '<div><a class="share-btn facebook">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$FacebookSvg !!} Facebook</a>' +
-                                    '<a class="share-btn reddit">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$RedditSvg !!} Reddit</a>' +
-                                    '<a class="share-btn linkedin">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$LinkedinSvg !!} LinkedIn</a>' +
-                                    '<a class="share-btn bluesky">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$BlueskySvg !!} Blue Sky</a></div>',
-                            },
-                        toHTML: function()
-                        {
-                            @verbatim
-                            let classes = '';
-                            if(this.getClasses().length > 0)
-                                classes = " class='" + this.getClasses().join(' ') + "' "
-                            return "<x-dicms-blogger.post-share-bar :post='$post'" + classes + "/>";
-                            @endverbatim
-                        },
-                    },
-                view:
-                    {
-                        tagName: 'div',
-                        onRender({el})
-                        {
-                            $(el).css('padding', '1em').css('width', '100%')
-                        }
-                    }
-            });
-
         Components.addType('article-link',
             {
                 extend: 'blade-variable',
@@ -362,29 +326,34 @@
                     }
             });
 
-        Components.addType('related-posts',
+        /**
+         *  Share Bar
+         */
+        Components.addType('share-bar',
             {
                 extend: 'blade-variable',
                 isComponent(el)
                 {
-                    return el.tagName === "related-posts"
+                    return el.tagName === "share-bar"
                 },
                 model:
                     {
                         defaults:
                             {
-                                tagName: 'related-posts',
-                                stylable: false,
-                                content: '<related-posts class="related-posts">' +
-                                    '<a href="#" class="related-post-link"><span class="related-post-title">Related Post 1</span></a>' +
-                                    '<a href="#" class="related-post-link"><span class="related-post-title">Related Post 2</span></a>' +
-                                    '<a href="#" class="related-post-link"><span class="related-post-title">Related Post 3</span></a>' +
-                                    '</related-posts>',
+                                tagName: 'share-bar',
+                                stylable: true,
+                                content: '<div><a class="share-btn facebook">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$FacebookSvg !!} Facebook</a>' +
+                                    '<a class="share-btn reddit">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$RedditSvg !!} Reddit</a>' +
+                                    '<a class="share-btn linkedin">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$LinkedinSvg !!} LinkedIn</a>' +
+                                    '<a class="share-btn bluesky">{!! \halestar\DiCmsBlogger\View\Components\PostShareBar::$BlueskySvg !!} Blue Sky</a></div>',
                             },
                         toHTML: function()
                         {
                             @verbatim
-                            return "<x-dicms-blogger.related-links :post='$post' />";
+                            let classes = '';
+                            if(this.getClasses().length > 0)
+                                classes = " class='" + this.getClasses().join(' ') + "' "
+                            return "<x-dicms-blogger.post-share-bar :post='$post'" + classes + "/>";
                             @endverbatim
                         },
                     },
@@ -396,33 +365,106 @@
                             $(el).css('padding', '1em').css('width', '100%')
                         }
                     }
+            });
 
+
+        /**
+         *  Related Posts
+         */
+
+        Components.addType('blade-variable-related-post-title',
+            {
+                extend: 'blade-variable',
+                model:
+                    {
+                        defaults:
+                            {
+                                content: '{{ __('dicms-blog::blogger.related.posts.title') }}',
+                                name: '{{ __('dicms-blog::blogger.related.posts.title') }}',
+                            },
+                        toHTML: function()
+                        {
+                            return "@{{$related->full_title}}";
+                        },
+                    },
+
+            });
+
+
+        Components.addType('related-post-link',
+            {
+                extend: 'blade-variable',
+                isComponent(el)
+                {
+                    return el.tagName === "A" && el.attributes.type === 'RPLINK'
+                },
+                model:
+                    {
+                        defaults:
+                            {
+                                tagName: 'a',
+                                droppable: true,
+                                name: '{{ __('dicms-blog::blogger.tag.link') }}',
+                                attributes:
+                                    {
+                                        href: '@{{$related->url}}',
+                                        type: 'RPLINK',
+                                    },
+                                traits:
+                                    [
+                                        'title'
+                                    ],
+                            }
+                    },
+                view:
+                    {
+                        tagName: 'div',
+                        onRender({el})
+                        {
+                            $(el).css('padding', '1em').css('width', '100%')
+                        }
+                    }
             });
 
         Components.addType('related-posts',
             {
-                extend: 'blade-variable',
                 isComponent(el)
                 {
-                    return el.tagName === "related-posts"
+                    return el.data === "@@foreach($post->relatedPosts as $related)\n" ||
+                        el.data === ("\n" + "@@endforeach")
                 },
                 model:
                     {
                         defaults:
                             {
-                                tagName: 'related-posts',
+                                tagName: 'rposts',
+                                draggable: true,
+                                droppable: true,
+                                removable: true,
+                                badgable: true,
                                 stylable: false,
-                                content: '<related-posts class="related-posts">' +
-                                    '<a href="#" class="related-post-link"><span class="related-post-title">Related Post 1</span></a>' +
-                                    '<a href="#" class="related-post-link"><span class="related-post-title">Related Post 2</span></a>' +
-                                    '<a href="#" class="related-post-link"><span class="related-post-title">Related Post 3</span></a>' +
-                                    '</related-posts>',
+                                highlightable: true,
+                                copyable: false,
+                                resizable: false,
+                                editable: false,
+                                layerable: true,
+                                selectable: true,
+                                components:
+                                    [
+                                        {
+                                            type: 'related-post-link',
+                                            components:
+                                                [
+                                                    { type: 'blade-variable-related-post-title' },
+                                                ]
+                                        },
+                                    ]
                             },
                         toHTML: function()
                         {
-                            @verbatim
-                                return "<x-dicms-blogger.related-links :post='$post' />";
-                            @endverbatim
+                            let open = "@@foreach($post->relatedPosts as $related)" + "\n";
+                            let close = "\n" + "@@endforeach";
+                            return open + this.getInnerHTML() + close;
                         },
                     },
                 view:
@@ -430,36 +472,54 @@
                         tagName: 'div',
                         onRender({el})
                         {
-                            $(el).css('padding', '1em').css('width', '100%')
+                            $(el).css('padding', '1em').css('width', '100%').addClass('article-summary');
                         }
                     }
-
             });
 
-        Components.addType('tags',
+        /**
+         *  Tags
+         */
+
+        Components.addType('post-tags',
             {
-                extend: 'blade-variable',
                 isComponent(el)
                 {
-                    return el.tagName === "tags"
+                    return el.data === "@@foreach($post->tags as $tag)\n" ||
+                        el.data === ("\n" + "@@endforeach")
                 },
                 model:
                     {
                         defaults:
                             {
-                                tagName: 'tags',
+                                tagName: 'atags',
+                                draggable: true,
+                                droppable: true,
+                                removable: true,
+                                badgable: true,
                                 stylable: false,
-                                content: '<tags class="tag-view">' +
-                                    '<a href="#" class="tag">tag1</a>' +
-                                    '<a href="#" class="tag">tag2</a>' +
-                                    '<a href="#" class="tag">tag3</a>' +
-                                    '</tags>',
+                                highlightable: true,
+                                copyable: false,
+                                resizable: false,
+                                editable: false,
+                                layerable: true,
+                                selectable: true,
+                                components:
+                                    [
+                                        {
+                                            type: 'tag-link',
+                                            components:
+                                                [
+                                                    { type: 'blade-variable-tag-name' },
+                                                ]
+                                        },
+                                    ]
                             },
                         toHTML: function()
                         {
-                            @verbatim
-                                return "<x-dicms-blogger.tag-view :tags='$post->tags' />";
-                            @endverbatim
+                            let open = "@@foreach($post->tags as $tag)" + "\n";
+                            let close = "\n" + "@@endforeach";
+                            return open + this.getInnerHTML() + close;
                         },
                     },
                 view:
@@ -467,12 +527,19 @@
                         tagName: 'div',
                         onRender({el})
                         {
-                            $(el).css('padding', '1em').css('width', '100%')
+                            $(el).css('padding', '1em').css('width', '100%').addClass('article-summary');
                         }
                     }
-
             });
 
+
+        /********************************************************
+         * Blocks
+         */
+
+        /**
+         * Posts Fields
+         */
 
         Blocks.add('PostTitle', {
             select: true,
@@ -595,6 +662,10 @@
                 },
         });
 
+        /**
+         * Share Bar
+         */
+
         Blocks.add('ShareBar',
             {
                 select: true,
@@ -607,10 +678,37 @@
                     },
             });
 
+        /**
+         * Related Posts
+         */
+        Blocks.add('RelatedPostsName',
+            {
+                select: true,
+                category: "{{ trans_choice('dicms-blog::blogger.related.posts', 2) }}",
+                label: "{{ __('dicms-blog::blogger.related.posts.title') }}",
+                media: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 64C0 46.3 14.3 32 32 32l48 0 48 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-16 0 0 112 224 0 0-112-16 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l48 0 48 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-16 0 0 144 0 176 16 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-48 0-48 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l16 0 0-144-224 0 0 144 16 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-48 0-48 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l16 0 0-176L48 96 32 96C14.3 96 0 81.7 0 64z"/></svg>`,
+                content:
+                    {
+                        type: "blade-variable-related-post-title",
+                    },
+            });
+
+        Blocks.add('RelatedPostsLink',
+            {
+                select: true,
+                category: "{{ trans_choice('dicms-blog::blogger.related.posts', 2) }}",
+                label: "{{ __('dicms-blog::blogger.related.posts.link') }}",
+                media: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></svg>`,
+                content:
+                    {
+                        type: "related-post-link",
+                    },
+            });
+
         Blocks.add('RelatedPosts',
             {
                 select: true,
-                category: "{{ __('dicms-blog::blogger.blog') }}",
+                category: "{{ trans_choice('dicms-blog::blogger.related.posts', 2) }}",
                 label: "{{ trans_choice('dicms-blog::blogger.related.posts', 2) }}",
                 media: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M192 32c0 17.7 14.3 32 32 32c123.7 0 224 100.3 224 224c0 17.7 14.3 32 32 32s32-14.3 32-32C512 128.9 383.1 0 224 0c-17.7 0-32 14.3-32 32zm0 96c0 17.7 14.3 32 32 32c70.7 0 128 57.3 128 128c0 17.7 14.3 32 32 32s32-14.3 32-32c0-106-86-192-192-192c-17.7 0-32 14.3-32 32zM96 144c0-26.5-21.5-48-48-48S0 117.5 0 144L0 368c0 79.5 64.5 144 144 144s144-64.5 144-144s-64.5-144-144-144l-16 0 0 96 16 0c26.5 0 48 21.5 48 48s-21.5 48-48 48s-48-21.5-48-48l0-224z"/></svg>`,
                 content:
@@ -618,6 +716,10 @@
                         type: "related-posts",
                     },
             });
+
+        /**
+         * Posts Tags
+         */
 
         Blocks.add('Tags',
             {
@@ -627,7 +729,7 @@
                 media: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M345 39.1L472.8 168.4c52.4 53 52.4 138.2 0 191.2L360.8 472.9c-9.3 9.4-24.5 9.5-33.9 .2s-9.5-24.5-.2-33.9L438.6 325.9c33.9-34.3 33.9-89.4 0-123.7L310.9 72.9c-9.3-9.4-9.2-24.6 .2-33.9s24.6-9.2 33.9 .2zM0 229.5L0 80C0 53.5 21.5 32 48 32l149.5 0c17 0 33.3 6.7 45.3 18.7l168 168c25 25 25 65.5 0 90.5L277.3 442.7c-25 25-65.5 25-90.5 0l-168-168C6.7 262.7 0 246.5 0 229.5zM144 144a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>`,
                 content:
                     {
-                        type: "tags",
+                        type: "post-tags",
                     },
             });
     };

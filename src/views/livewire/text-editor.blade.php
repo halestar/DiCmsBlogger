@@ -9,39 +9,22 @@
 </div>
 
 @assets
-<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.css" />
+<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.css" />
 <script type="importmap">
     {
         "imports": {
-            "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.js",
-            "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.0/"
+            "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.js",
+            "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.0.0/"
         }
     }
 </script>
 <style>
-    .ck-editor {
-        height: 100% !important;
-        display: flex;
-        flex-direction: column;
+    .ck-editor__editable_inline {
+        height: 500px;
     }
-    .ck-editor .ck-editor__top {
-        flex-shrink: 1;
-    }
-    .ck-editor .ck-editor__main {
-        flex-grow: 1;
-        position: relative;
-    }
-    .ck-editor .ck-editor__main .ck-editor__editable, .ck-editor .ck-editor__main .ck-source-editing-area {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
     #editor-container
     {
-        min-height: 600px;
+        max-height: 600px;
         height: 600px;
     }
 </style>
@@ -87,6 +70,9 @@
         Subscript,
         Superscript,
         Table,
+        TableCellProperties,
+        TableColumnResize,
+        TableProperties,
         TableToolbar,
         TextTransformation,
         Underline
@@ -109,19 +95,26 @@
                 button.on( 'execute', () =>
                 {
                     const el = document.getElementById('livewire-editor');
-                    if(document.fullscreenElement) {
+                    if(document.fullscreenElement)
+                    {
                         document.exitFullscreen();
                         $('#editor-container').css('height', '600px');
+                        $('.ck-editor__editable_inline').css('height', '500px');
                     }
-                    else {
+                    else
+                    {
                         el.requestFullscreen();
                         $('#editor-container').css('height', '100%');
+                        $('.ck-editor__editable_inline').css('height', '100%');
                     }
                 });
                 document.addEventListener('fullscreenchange', () =>
                 {
                     if(!document.fullscreenElement)
+                    {
                         $('#editor-container').css('height', '600px');
+                        $('.ck-editor__editable_inline').css('height', '500px');
+                    }
                 });
                 return button;
             });
@@ -156,7 +149,9 @@
                 CodeBlock,
                 FindAndReplace,
                 Heading, Alignment,
-                Highlight, AutoLink, Link, MediaEmbed, SpecialCharacters, SpecialCharactersEssentials, Table, TableToolbar,
+                Highlight, AutoLink, Link, MediaEmbed, SpecialCharacters, SpecialCharactersEssentials,
+                Table, TableToolbar, TableColumnResize,
+                TableCellProperties, TableProperties,
                 FullScreen, Autosave
             ],
             toolbar: {
@@ -188,7 +183,8 @@
             },
             table:
                 {
-                    contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
+                    contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells',
+                        'tableProperties', 'tableCellProperties' ]
                 },
             autosave: {
                 waitingTime: 60000,

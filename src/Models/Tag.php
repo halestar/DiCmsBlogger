@@ -2,6 +2,7 @@
 
 namespace halestar\DiCmsBlogger\Models;
 
+use halestar\LaravelDropInCms\DiCMS;
 use halestar\LaravelDropInCms\Models\Scopes\OrderByNameScope;
 use halestar\LaravelDropInCms\Traits\BackUpable;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
@@ -36,5 +37,13 @@ class Tag extends Model
     {
         return $this->belongsToMany(BlogPost::class,
             config('dicms.table_prefix') . 'posts_tags', 'tag_id', 'post_id');
+    }
+
+    public function url(): string
+    {
+        $searchPage = Blog::searchPage();
+        if($searchPage)
+            return DiCMS::dicmsPublicRoute() . "/" . $searchPage->url . "?search_tag=" . urlencode($this->name);
+        return '#';
     }
 }

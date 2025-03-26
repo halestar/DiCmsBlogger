@@ -79,4 +79,6 @@
             {{ __('dicms-blog::blogger.blogs.none') }}
         </div>
     @endif
+    <hr class="my-3" />
+    <livewire:dicms-blogger.highlighted-posts-config />
 @endsection
