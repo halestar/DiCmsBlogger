@@ -158,7 +158,7 @@ class DiCmsBlogger implements DiCmsPlugin
                     $searchResults = $tag->posts()->get();
             }
             //and return the page
-            return Blade::render($page->html, ['searchResults' => $searchResults]);
+            return Blade::render($page->html, ['searchResults' => $searchResults, 'search_term' => $searchTerm]);
         }
         elseif(Str::of($page->name)->endsWith('Index'))
         {

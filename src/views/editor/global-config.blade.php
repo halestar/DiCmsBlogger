@@ -72,6 +72,7 @@
                                         type: 'text',
                                         name: 'search_term',
                                         id: 'search_term',
+                                        value: "@{{$search_term??''}}"
                                     }
                             },
                     },
