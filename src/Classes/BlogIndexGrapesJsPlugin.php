@@ -5,7 +5,6 @@ namespace halestar\DiCmsBlogger\Classes;
 use halestar\LaravelDropInCms\Classes\GrapesJsEditableItem;
 use halestar\LaravelDropInCms\Models\Page;
 use halestar\LaravelDropInCms\Plugins\DiCmsGrapesJsPlugin;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class BlogIndexGrapesJsPlugin extends DiCmsGrapesJsPlugin
@@ -19,10 +18,6 @@ class BlogIndexGrapesJsPlugin extends DiCmsGrapesJsPlugin
 
     public function shouldInclude(GrapesJsEditableItem $objEditing): bool
     {
-        Log::debug("in should include");
-        Log::debug("objEditing instance of Page: " . ($objEditing instanceof Page));
-        Log::debug("plugin: " . $objEditing->plugin);
-        Log::debug("name is " . $objEditing->name);
         return ($objEditing instanceof Page && $objEditing->plugin_page &&
             $objEditing->plugin == 'halestar\DiCmsBlogger\DiCmsBlogger' &&
             Str::of($objEditing->name)->endsWith('Index'));

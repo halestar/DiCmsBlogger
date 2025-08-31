@@ -19,7 +19,6 @@ use halestar\LaravelDropInCms\Models\Page;
 use halestar\LaravelDropInCms\Plugins\DiCmsPlugin;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -220,7 +219,6 @@ class DiCmsBlogger implements DiCmsPlugin
             return $page;
         $matches = [];
         $search = '/' . DiCmsBlogger::getRoutePrefix() . '\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)$/';
-        Log::debug("attempting to mach " . $search . " and " . $path);
         if(preg_match($search, $path, $matches))
         {
             //search for a blog

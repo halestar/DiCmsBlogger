@@ -2,7 +2,65 @@
 
 All notable changes to `DiCmsBlogger` will be documented in this file
 
+## 0.7.5.3
+
+* Removes some log items that were bugging me.
+* Updates the changelog.
+
+## 0.7.5.3
+
+Persists the search term in the search page.
+
+## 0.7.5.2
+
+removes widgets. Seriously thinking about removing widgets alltogether.
+Changes Highlightable Posts, related posts and tags, and moved them completely to their own GrapesJs plugin. This allows
+for complete customization of all the moving pieces and allowing all the customization to happen through grapes js.
+Cleaned up the editor CSS, it no looks better an the full screen plugin works much better too.
+Moves highlightable posts to it's own section itn eh blogs.
+
+## 0.7.5.1
+
+Updates the license in composer.
+Fixes a bug in preview.
+
+## 0.7.5
+
+This updates deals with the major 0.7.5 update in DiCMS. The numbering is synched to it to make the versions work nice
+with the new design update.
+
+Read the DiCMS 0.7.5 notes for more info.
+
+## 0.7.3
+
+Bug fix in blog post update.
+
+## 0.7.2
+
+Updated composer to the right nomeclature.
+
+## 0.7.1
+
+Updates the license to the MIT License
+
+## 0.7.0
+
+Full release with all new goodies!
+
+* New Blog Search Page.
+    * You can now create a search page to search all blogs.
+    * Search will search by keyword and tag
+    * You can also add the search bar in any pages.
+    * Laravel scout is now used for searching.
+* Blogs Posts can now be tagged
+    * In advanced settings for a blog post you can add tags to your post
+    * There are new widgets for tags that will either display all tags or that post's tags.
+    * Tags tie in to the search system.
+* Blog posts can now be added as "related to" other blog posts.
+    * A new widget will appear to shot in the post's page.
+
 ## 0.6.4
+
 Adds some more options for images in the text editor.
 
 ## 0.6.3
