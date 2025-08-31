@@ -2,7 +2,7 @@
 
 All notable changes to `DiCmsBlogger` will be documented in this file
 
-## 0.7.5.3
+## 0.7.5.4
 
 * Removes some log items that were bugging me.
 * Updates the changelog.
